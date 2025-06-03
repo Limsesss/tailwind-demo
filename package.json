@@ -1,6 +1,7 @@
 {
   "name": "tailwind-demo",
   "version": "1.0.0",
+  "type": "module",
   "scripts": {
     "postinstall": "npm install --prefix client",
     "build-client": "npm run build --prefix client",
