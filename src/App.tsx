@@ -24,6 +24,7 @@ function App() {
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
+      <main>
       <Hero />
       <section id="services" className="container mx-auto px-6 py-12 grid gap-8 md:grid-cols-3">
         {services.map(service => (
@@ -31,6 +32,7 @@ function App() {
         ))}
       </section>
       <ContactForm />
+      </main>
       <Footer />
     </div>
   );
