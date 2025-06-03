@@ -2,7 +2,7 @@
   "name": "tailwind-demo",
   "version": "1.0.0",
   "scripts": {
-    "postinstall": "cd client && npm install && npx vite build",
+    "postinstall": "cd client && npm install && chmod +x ./node_modules/.bin/vite && npx vite build",
     "start": "node server.js"
   },
   "devDependencies": {
