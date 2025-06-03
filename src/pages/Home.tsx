@@ -9,7 +9,9 @@ const services = [
 const Home = () => (
   <main className="p-6 grid grid-cols-1 md:grid-cols-3 gap-4">
     {services.map((service, i) => (
-      <ServiceCard key={i} {...service} />
+      <ServiceCard onClick={function (): void {
+            throw new Error("Function not implemented.");
+        } } shortDescription={""} fullDescription={""} image={""} key={i} {...service} />
     ))}
   </main>
 );

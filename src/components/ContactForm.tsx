@@ -17,6 +17,7 @@ export const ContactForm: React.FC = () => {
 
   return (
     <section id="contact" className="max-w-md mx-auto p-6 bg-white rounded shadow my-10">
+        <h2 className="text-3xl font-bold mb-4"> Мы вам поможем!</h2>
       <form onSubmit={handleSubmit} className="space-y-4">
         <input
           type="text"

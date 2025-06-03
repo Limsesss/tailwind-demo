@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 
 export const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,11 +45,11 @@ export const Header: React.FC = () => {
       </button>
 
       {/* Навигация для десктопа */}
-      <nav className="hidden md:flex space-x-6">
-        <a href="#hero" className="hover:underline">Главная</a>
-        <a href="#services" className="hover:underline">Услуги</a>
-        <a href="#contact" className="hover:underline">Контакты</a>
-      </nav>
+      <nav className={`${isOpen ? 'block' : 'hidden'} md:flex space-x-4`}>
+          <Link to="/" className="hover:underline">Главная</Link>
+          <Link to="/services" className="hover:underline">Услуги</Link>
+          <Link to="/contacts" className="hover:underline">Контакты</Link>
+        </nav>
 
       {/* Мобильное меню */}
       {isOpen && (

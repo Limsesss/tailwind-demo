@@ -1,41 +1,42 @@
+// src/App.tsx
 import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
-import { Hero } from './components/Hero';
-import { ServiceCard } from './components/ServiceCard';
-import { ContactForm } from './components/ContactForm';
 import { Footer } from './components/Footer';
+import { Hero } from './components/Hero';
+import { ContactForm } from './components/ContactForm';
+import { ServicesPage } from './pages/ServicesPage';
 
-const services = [
-  {
-    title: 'Диагностика и ремонт ПК',
-    description: 'Полная диагностика и устранение неисправностей любой сложности.',
-  },
-  {
-    title: 'Настройка программного обеспечения',
-    description: 'Установка, настройка и обновление программ.',
-  },
-  {
-    title: 'Чистка и профилактика',
-    description: 'Чистка компьютера от пыли и профилактические работы для продления срока службы.',
-  },
-];
-
-function App() {
+export const App: React.FC = () => {
   return (
-    <div className="min-h-screen flex flex-col">
-      <Header />
-      <main>
-      <Hero />
-      <section id="services" className="container mx-auto px-6 py-12 grid gap-8 md:grid-cols-3">
-        {services.map(service => (
-          <ServiceCard key={service.title} title={service.title} description={service.description} />
-        ))}
-      </section>
-      <ContactForm />
-      </main>
-      <Footer />
-    </div>
+    <Router>
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-grow">
+          <Routes>
+            <Route
+              path="/"
+              element={
+                <>
+                  <section className="py-16">
+                    <Hero />
+                  </section>
+                  <section id="contact" className="py-16">
+                    <div className="container mx-auto px-4 max-w-lg">
+                      <h2 className="text-3xl font-bold mb-8 text-center">Свяжитесь с нами</h2>
+                      <ContactForm />
+                    </div>
+                  </section>
+                </>
+              }
+            />
+            <Route path="/services" element={<ServicesPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
-}
+};
 
 export default App;
