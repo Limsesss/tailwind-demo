@@ -5,12 +5,14 @@ interface ServiceCardProps {
   shortDescription: string;
   fullDescription: string;
   image: string;
+  description: string;
 }
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({
   title,
   shortDescription,
   fullDescription,
+  description,
   image,
 }) => {
   const [isOpen, setIsOpen] = useState(false);

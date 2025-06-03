@@ -9,5 +9,5 @@
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true
   },
-  "include": ["./client/src"]
+  "include": ["./client/src", "client/vite.config.ts"]
 }
