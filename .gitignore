@@ -16,3 +16,4 @@ packages/
 # Игнорировать файлы настройки Rider/VS Code (если нужно)
 .idea/
 .vscode/
+.vercel
