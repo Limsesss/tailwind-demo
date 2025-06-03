@@ -2,9 +2,10 @@
   "name": "tailwind-demo",
   "version": "1.0.0",
   "scripts": {
-    "postinstall": "npm install --prefix client",
-    "build-client": "npm run build --prefix client",
-    "start": "node server.js"
+  "postinstall": "npm install --prefix client",
+  "build-client": "npm run build --prefix client",
+  "build": "npm run build-client",
+  "start": "node server.js"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",
