@@ -2,13 +2,17 @@ import express from 'express';
 import { Pool } from 'pg';
 
 const app = express();
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL, // переменная окружения Render
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false, // важно для подключения к Render
+  },
 });
 
 app.use(express.json());
 
-// Пример API
+// Простой тестовый маршрут
 app.get('/api/test', async (req, res) => {
   try {
     const result = await pool.query('SELECT NOW()');
@@ -18,7 +22,7 @@ app.get('/api/test', async (req, res) => {
   }
 });
 
-// Статические файлы фронтенда (после билда)
+// Отдаём статику из client/dist
 import path from 'path';
 import { fileURLToPath } from 'url';
 
