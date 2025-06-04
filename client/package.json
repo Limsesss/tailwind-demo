@@ -2,8 +2,8 @@
   "name": "tailwind-demo",
   "version": "1.0.0",
   "scripts": {
-    "build": "npx vite build",
-    "dev": "npx vite"
+    "dev": "vite",
+    "build": "vite build"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",
