@@ -2,10 +2,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { Header } from './components/Header';
-import { Footer } from 'components/Footer';
-import { Hero } from 'components/Hero';
-import { ContactForm } from 'components/ContactForm';
-import { ServicesPage } from 'pages/ServicesPage';
+import { Footer } from './components/Footer';
+import { Hero } from './components/Hero';
+import { ContactForm } from './components/ContactForm';
+import { ServicesPage } from './pages/ServicesPage';
 
 export const App: React.FC = () => {
   return (
