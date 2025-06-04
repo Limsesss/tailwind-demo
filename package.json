@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "build": "npm install --prefix client && npm run build --prefix client",
+    "build": "bash build.sh",
     "start": "node server.js"
   },
   "devDependencies": {
