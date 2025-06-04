@@ -17,3 +17,4 @@ packages/
 .idea/
 .vscode/
 .vercel
+node_modules
