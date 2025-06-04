@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "vite build"
+    "build": "npx vite build"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",
