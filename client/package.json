@@ -2,7 +2,8 @@
   "name": "tailwind-demo",
   "version": "1.0.0",
   "scripts": {
-    "build": "npm run build --prefix client"
+    "dev": "vite",
+    "build": "vite build"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",
