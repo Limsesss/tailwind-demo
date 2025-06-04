@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "dev": "vite",
-    "build": "npx vite build"
+    "build": "vite build"
   },
   "devDependencies": {
     "@types/react": "^19.1.6",
@@ -18,8 +18,7 @@
   "dependencies": {
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
-    "react-router-dom": "^6.30.1",
-    "tailwind-demo": "file:.."
+    "react-router-dom": "^6.30.1"
   },
   "main": "postcss.config.js",
   "keywords": [],
