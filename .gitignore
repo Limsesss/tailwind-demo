@@ -19,3 +19,6 @@ packages/
 .vercel
 node_modules
 node_modules/
+
+dist/
+!client/dist
