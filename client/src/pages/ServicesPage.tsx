@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { ServiceCard } from '../components/ServiceCard';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../components/CartContext';
-import { motion } from 'framer-motion'; // ⬅️ добавляем анимацию
+import { Notification } from '../components/Notification';
+import { motion } from 'framer-motion';
 
 interface Service {
   id: number;
@@ -20,7 +21,7 @@ const SERVICES: Service[] = [
     title: 'Диагностика компьютера',
     shortDescription: 'Быстрая и точная проверка',
     fullDescription: 'Полная диагностика всех компонентов ПК для выявления проблем.',
-    image: '/images/diagnostics.jpg',
+    image: '',
     description: 'Диагностика компьютера',
     price: 1000,
   },
@@ -29,16 +30,25 @@ const SERVICES: Service[] = [
     title: 'Установка Windows',
     shortDescription: 'Лицензионная установка Windows 10/11',
     fullDescription: 'Полная переустановка Windows с драйверами и настройкой.',
-    image: '/images/windows.jpg',
+    image: '',
     description: 'Установка Windows',
     price: 1500,
   },
-  // Можно добавить больше
 ];
 
 export const ServicesPage: React.FC = () => {
-  const { cartItems } = useCart();
+  const { cartItems, addToCart } = useCart();
   const navigate = useNavigate();
+  const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
+
+  const handleAddToCart = (service: Service) => {
+    addToCart({
+      id: service.id,
+      service: service.title,
+      price: service.price,
+    });
+    setNotificationMessage(`"${service.title}" добавлена в корзину`);
+  };
 
   return (
     <main className="bg-gray-50 min-h-screen py-20 px-4">
@@ -74,11 +84,22 @@ export const ServicesPage: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1, duration: 0.4 }}
             >
-              <ServiceCard {...service} />
+              <ServiceCard
+                {...service}
+                onAddToCart={() => handleAddToCart(service)} // ⬅️ кастомное поведение
+              />
             </motion.div>
           ))}
         </div>
       </div>
+
+      {/* Notification */}
+      {notificationMessage && (
+        <Notification
+          message={notificationMessage}
+          onClose={() => setNotificationMessage(null)}
+        />
+      )}
     </main>
   );
 };
