@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "postinstall": "npm install --prefix client",
     "build": "npm run build --prefix client",
     "start": "npm run build && node server.js"
   },
