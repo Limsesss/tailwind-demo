@@ -2,6 +2,7 @@ import React from 'react';
 import { ServiceCard } from '../components/ServiceCard';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../components/CartContext';
+import { motion } from 'framer-motion'; // ⬅️ добавляем анимацию
 
 interface Service {
   id: number;
@@ -32,7 +33,7 @@ const SERVICES: Service[] = [
     description: 'Установка Windows',
     price: 1500,
   },
-  // Добавьте больше услуг при необходимости
+  // Можно добавить больше
 ];
 
 export const ServicesPage: React.FC = () => {
@@ -66,17 +67,15 @@ export const ServicesPage: React.FC = () => {
 
         {/* Services Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-          {SERVICES.map(service => (
-            <ServiceCard
+          {SERVICES.map((service, index) => (
+            <motion.div
               key={service.id}
-              id={service.id}
-              title={service.title}
-              shortDescription={service.shortDescription}
-              fullDescription={service.fullDescription}
-              description={service.description}
-              image={service.image}
-              price={service.price}
-            />
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1, duration: 0.4 }}
+            >
+              <ServiceCard {...service} />
+            </motion.div>
           ))}
         </div>
       </div>

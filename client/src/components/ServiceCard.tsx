@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { useCart } from '../components/CartContext';
 
 interface ServiceCardProps {
-  id: number;               // уникальный идентификатор
+  id: number;
   title: string;
   shortDescription: string;
   fullDescription: string;
   image: string;
   description: string;
   price: number;
+  onAddToCart?: () => void; // ⬅️ новый проп
 }
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({
@@ -16,15 +16,12 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
   title,
   shortDescription,
   fullDescription,
-  description,
   image,
   price,
+  onAddToCart,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
-  const [showToast, setShowToast] = useState(false);
-
-  const { addToCart } = useCart();
 
   useEffect(() => {
     if (isOpen) {
@@ -37,15 +34,9 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
     }
   }, [isOpen]);
 
-  const handleAddToCart = () => {
-    addToCart({ id, service: title, price });  // передаем id и service (название)
-    setShowToast(true);
-    setTimeout(() => setShowToast(false), 3000);
-  };
-
   return (
     <>
-      <div className="bg-white rounded-2xl shadow-md p-6 text-center space-y-4 flex flex-col">
+      <div className="bg-white rounded-2xl shadow-md p-6 text-center space-y-4 flex flex-col hover:shadow-lg transition duration-300">
         {image && (
           <img
             src={image}
@@ -64,7 +55,7 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             Подробнее
           </button>
           <button
-            onClick={handleAddToCart}
+            onClick={onAddToCart} // ⬅️ делегируем действие родителю
             className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
           >
             В корзину
@@ -100,13 +91,6 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
             <h2 className="text-2xl font-bold mb-4 text-violet-800">{title}</h2>
             <p className="text-gray-700 whitespace-pre-line">{fullDescription}</p>
           </div>
-        </div>
-      )}
-
-      {/* Всплывающее уведомление */}
-      {showToast && (
-        <div className="fixed bottom-6 right-6 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50 animate-fadeInOut">
-          Товар "{title}" добавлен в корзину
         </div>
       )}
     </>
