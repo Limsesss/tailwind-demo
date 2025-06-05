@@ -42,3 +42,22 @@ const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+app.post('/api/inquiry', async (req, res) => {
+  const { name, email, message } = req.body;
+
+  if (!name || !email || !message) {
+    return res.status(400).json({ error: 'Все поля обязательны' });
+  }
+
+  try {
+    await pool.query(
+      'INSERT INTO inquiries (name, email, message, created_at) VALUES ($1, $2, $3, NOW())',
+      [name, email, message]
+    );
+
+    res.status(201).json({ success: true });
+  } catch (err) {
+    console.error('Ошибка при добавлении заявки:', err);
+    res.status(500).json({ error: 'Ошибка при сохранении заявки' });
+  }
+});
