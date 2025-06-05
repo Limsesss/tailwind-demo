@@ -1,35 +1,47 @@
 import React, { useState, useEffect } from 'react';
+import { useCart } from '../components/CartContext';
 
 interface ServiceCardProps {
+  id: number;               // уникальный идентификатор
   title: string;
   shortDescription: string;
   fullDescription: string;
   image: string;
   description: string;
+  price: number;
 }
 
 export const ServiceCard: React.FC<ServiceCardProps> = ({
+  id,
   title,
   shortDescription,
   fullDescription,
   description,
   image,
+  price,
 }) => {
- const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
+  const [showToast, setShowToast] = useState(false);
 
-  // Управление анимацией появления/исчезновения модалки
+  const { addToCart } = useCart();
+
   useEffect(() => {
     if (isOpen) {
       setIsVisible(true);
-      document.body.style.overflow = 'hidden'; // запрет скролла под модалкой
+      document.body.style.overflow = 'hidden';
     } else {
-      // задержка для анимации закрытия
       const timeout = setTimeout(() => setIsVisible(false), 300);
-      document.body.style.overflow = 'auto'; // разрешаем скролл
+      document.body.style.overflow = 'auto';
       return () => clearTimeout(timeout);
     }
   }, [isOpen]);
+
+  const handleAddToCart = () => {
+    addToCart({ id, service: title, price });  // передаем id и service (название)
+    setShowToast(true);
+    setTimeout(() => setShowToast(false), 3000);
+  };
 
   return (
     <>
@@ -43,12 +55,21 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
         )}
         <h3 className="text-xl font-semibold text-violet-700">{title}</h3>
         <p className="text-gray-600 flex-grow">{shortDescription}</p>
-        <button
-          onClick={() => setIsOpen(true)}
-          className="mt-4 px-6 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition"
-        >
-          Подробнее
-        </button>
+        <p className="text-lg font-bold text-violet-800">{price} ₽</p>
+        <div className="flex justify-center gap-4 mt-4">
+          <button
+            onClick={() => setIsOpen(true)}
+            className="px-6 py-2 bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition"
+          >
+            Подробнее
+          </button>
+          <button
+            onClick={handleAddToCart}
+            className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+          >
+            В корзину
+          </button>
+        </div>
       </div>
 
       {isVisible && (
@@ -56,11 +77,11 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transition-opacity duration-300 ${
             isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
           }`}
-          onClick={() => setIsOpen(false)} // закрываем при клике вне модалки
+          onClick={() => setIsOpen(false)}
         >
           <div
             className="bg-white p-6 rounded-2xl max-w-md w-full shadow-lg relative"
-            onClick={(e) => e.stopPropagation()} // предотвращаем закрытие при клике по модалке
+            onClick={(e) => e.stopPropagation()}
           >
             <button
               onClick={() => setIsOpen(false)}
@@ -81,10 +102,15 @@ export const ServiceCard: React.FC<ServiceCardProps> = ({
           </div>
         </div>
       )}
+
+      {/* Всплывающее уведомление */}
+      {showToast && (
+        <div className="fixed bottom-6 right-6 bg-green-600 text-white px-4 py-2 rounded shadow-lg z-50 animate-fadeInOut">
+          Товар "{title}" добавлен в корзину
+        </div>
+      )}
     </>
   );
 };
-
-
 
 export default ServiceCard;
