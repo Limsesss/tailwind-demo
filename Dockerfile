@@ -1,21 +1,22 @@
-# Используем официальное Node-окружение
+# Используем Node.js
 FROM node:18
 
-# Устанавливаем рабочую директорию
+# Создаём рабочую директорию
 WORKDIR /app
 
-# Копируем зависимости и устанавливаем
-COPY client/package*.json ./client/
-RUN cd client && npm install
+# Копируем package.json из корня и устанавливаем зависимости сервера
+COPY package*.json ./
+RUN npm install
 
-# Копируем остальной проект
+# Копируем client package.json и устанавливаем клиентские зависимости
+COPY client/package*.json ./client/
+RUN cd client && npm install && npm run build
+
+# Копируем остальной код
 COPY . .
 
-# Собираем проект
-RUN cd client && npm run build
+# Экспонируем порт, на котором будет работать Express
+EXPOSE 3000
 
-# Используем простой статический сервер
-RUN npm install -g serve
-
-# Стартуем сервер
-CMD ["serve", "-s", "client/dist"]
+# Запускаем сервер
+CMD ["node", "server.js"]
