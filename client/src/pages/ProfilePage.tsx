@@ -3,15 +3,16 @@ import React, { useState } from 'react';
 type Tab = 'profile' | 'orders' | 'cart';
 
 interface Order {
-  id: string;
-  date: string;
-  status: 'В обработке' | 'Выполнен' | 'Отменён';
-  total: number;
+  id: number;           // id как number, т.к. в Prisma Int
+  createdAt: string;    // дата как ISO строка
+  status: string;       // статус — строка
+  service: string;      // услуга (если надо)
+  // total можно добавить, если считаешь нужным
 }
 
 interface CartItem {
-  id: string;
-  name: string;
+  id: number;
+  service: string;
   price: number;
   quantity: number;
 }
@@ -19,24 +20,25 @@ interface CartItem {
 export const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('profile');
 
-  // Пример пользователя
+  // Пример пользователя (из API или стейта)
   const [user, setUser] = useState({
     name: 'Иван Иванов',
     email: 'ivan@example.com',
   });
+
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(user);
 
-  // Пример заказов
+  // Пример заказов (здесь лучше получать из API)
   const [orders] = useState<Order[]>([
-    { id: '001', date: '2025-05-01', status: 'Выполнен', total: 3500 },
-    { id: '002', date: '2025-05-10', status: 'В обработке', total: 1200 },
+    { id: 1, createdAt: '2025-05-01T10:00:00Z', status: 'Выполнен', service: 'Чистка от пыли' },
+    { id: 2, createdAt: '2025-05-10T15:30:00Z', status: 'В обработке', service: 'Замена комплектующих' },
   ]);
 
   // Пример корзины
   const [cartItems, setCartItems] = useState<CartItem[]>([
-    { id: 'a1', name: 'Чистка от пыли', price: 1000, quantity: 1 },
-    { id: 'b2', name: 'Замена комплектующих', price: 2500, quantity: 2 },
+    { id: 1, service: 'Чистка от пыли', price: 1000, quantity: 1 },
+    { id: 2, service: 'Замена комплектующих', price: 2500, quantity: 2 },
   ]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,23 +48,24 @@ export const ProfilePage: React.FC = () => {
   const handleSaveProfile = () => {
     setUser(formData);
     setEditMode(false);
-    // здесь можно отправить данные на сервер
+    // Тут вызови API для сохранения, если надо
   };
 
-  const handleRemoveCartItem = (id: string) => {
+  const handleRemoveCartItem = (id: number) => {
     setCartItems(prev => prev.filter(item => item.id !== id));
   };
 
-  const handleQuantityChange = (id: string, quantity: number) => {
+  const handleQuantityChange = (id: number, quantity: number) => {
     if (quantity < 1) return;
     setCartItems(prev =>
-      prev.map(item =>
-        item.id === id ? { ...item, quantity } : item
-      )
+      prev.map(item => (item.id === id ? { ...item, quantity } : item))
     );
   };
 
-  const totalCartPrice = cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+  const totalCartPrice = cartItems.reduce(
+    (acc, item) => acc + item.price * item.quantity,
+    0
+  );
 
   return (
     <main className="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-10">
@@ -92,8 +95,12 @@ export const ProfilePage: React.FC = () => {
         <section>
           {!editMode ? (
             <div className="space-y-4">
-              <p><strong>Имя:</strong> {user.name}</p>
-              <p><strong>Email:</strong> {user.email}</p>
+              <p>
+                <strong>Имя:</strong> {user.name}
+              </p>
+              <p>
+                <strong>Email:</strong> {user.email}
+              </p>
               <button
                 onClick={() => setEditMode(true)}
                 className="mt-4 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
@@ -153,16 +160,16 @@ export const ProfilePage: React.FC = () => {
                   <th className="border border-gray-300 px-4 py-2 text-left">Номер заказа</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">Дата</th>
                   <th className="border border-gray-300 px-4 py-2 text-left">Статус</th>
-                  <th className="border border-gray-300 px-4 py-2 text-right">Сумма, ₽</th>
+                  <th className="border border-gray-300 px-4 py-2 text-left">Услуга</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map(order => (
                   <tr key={order.id} className="hover:bg-violet-50">
                     <td className="border border-gray-300 px-4 py-2">{order.id}</td>
-                    <td className="border border-gray-300 px-4 py-2">{order.date}</td>
+                    <td className="border border-gray-300 px-4 py-2">{new Date(order.createdAt).toLocaleDateString()}</td>
                     <td className="border border-gray-300 px-4 py-2">{order.status}</td>
-                    <td className="border border-gray-300 px-4 py-2 text-right">{order.total.toLocaleString()}</td>
+                    <td className="border border-gray-300 px-4 py-2">{order.service}</td>
                   </tr>
                 ))}
               </tbody>
@@ -180,7 +187,7 @@ export const ProfilePage: React.FC = () => {
               {cartItems.map(item => (
                 <div key={item.id} className="flex items-center justify-between border rounded p-4">
                   <div>
-                    <h3 className="font-semibold">{item.name}</h3>
+                    <h3 className="font-semibold">{item.service}</h3>
                     <p>Цена: {item.price.toLocaleString()} ₽</p>
                   </div>
                   <div className="flex items-center space-x-2">
@@ -194,7 +201,7 @@ export const ProfilePage: React.FC = () => {
                     <button
                       onClick={() => handleRemoveCartItem(item.id)}
                       className="text-red-600 hover:text-red-800 font-bold"
-                      aria-label={`Удалить ${item.name} из корзины`}
+                      aria-label={`Удалить ${item.service} из корзины`}
                     >
                       &times;
                     </button>
@@ -217,6 +224,5 @@ export const ProfilePage: React.FC = () => {
     </main>
   );
 };
-
 
 export default ProfilePage;

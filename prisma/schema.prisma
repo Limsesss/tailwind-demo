@@ -8,18 +8,20 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
+  id        Int        @id @default(autoincrement())
+  email     String     @unique
   password  String
   name      String
-  createdAt DateTime @default(now())
+  createdAt DateTime   @default(now())
   orders    Order[]
+  cartItems CartItem[] // <- вот это добавь
 }
 
 model Order {
   id        Int      @id @default(autoincrement())
   service   String
   status    String   @default("новый")
+  total     Float?
   userId    Int
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
@@ -39,4 +41,13 @@ model inquiries {
   email      String
   message    String
   created_at DateTime? @default(now()) @db.Timestamp(6)
+}
+
+model CartItem {
+  id       Int    @id @default(autoincrement())
+  userId   Int
+  service  String
+  price    Float
+  quantity Int
+  user     User   @relation(fields: [userId], references: [id])
 }
