@@ -61,3 +61,12 @@ app.post('/api/inquiry', async (req, res) => {
     res.status(500).json({ error: 'Ошибка при сохранении заявки' });
   }
 });
+app.get('/api/inquiries', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM inquiries ORDER BY created_at DESC');
+    res.json(result.rows);
+  } catch (err) {
+    console.error('Ошибка получения заявок:', err);
+    res.status(500).json({ error: 'Ошибка сервера' });
+  }
+});

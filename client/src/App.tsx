@@ -8,6 +8,7 @@ import { ContactForm } from './components/ContactForm';
 import { ServicesPage } from './pages/ServicesPage';
 import { ProfilePage } from './pages/ProfilePage'; 
 import { ContactsPage } from './pages/ContactsPage';
+import AdminInquiriesPage from './pages/AdminInquiriesPage';
 
 export const App: React.FC = () => {
   return (
@@ -35,6 +36,7 @@ export const App: React.FC = () => {
             <Route path="/services" element={<ServicesPage />} />
             <Route path="/profile" element={<ProfilePage />} />
             <Route path="/contacts" element={<ContactsPage />} />
+            <Route path="/admin/inquiries" element={<AdminInquiriesPage />} />
           </Routes>
         </main>
         <Footer />
