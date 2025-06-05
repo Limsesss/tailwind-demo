@@ -49,6 +49,7 @@ export const Header: React.FC = () => {
           <Link to="/" className="hover:underline">Главная</Link>
           <Link to="/services" className="hover:underline">Услуги</Link>
           <Link to="/contacts" className="hover:underline">Контакты</Link>
+          <Link to="/profile" className="hover:underline">Личный кабинет</Link>
         </nav>
 
       {/* Мобильное меню */}

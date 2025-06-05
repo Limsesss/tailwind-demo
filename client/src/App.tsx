@@ -6,6 +6,8 @@ import { Footer } from './components/Footer';
 import { Hero } from './components/Hero';
 import { ContactForm } from './components/ContactForm';
 import { ServicesPage } from './pages/ServicesPage';
+import { ProfilePage } from './pages/ProfilePage'; 
+import { ContactsPage } from './pages/ContactsPage';
 
 export const App: React.FC = () => {
   return (
@@ -31,6 +33,8 @@ export const App: React.FC = () => {
               }
             />
             <Route path="/services" element={<ServicesPage />} />
+            <Route path="/profile" element={<ProfilePage />} />
+            <Route path="/contacts" element={<ContactsPage />} />
           </Routes>
         </main>
         <Footer />
@@ -38,5 +42,6 @@ export const App: React.FC = () => {
     </Router>
   );
 };
+
 
 export default App;
