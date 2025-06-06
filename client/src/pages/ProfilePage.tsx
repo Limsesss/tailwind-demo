@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
-import { useCart, CartItem } from '../components/CartContext'; // путь к контексту корзины — подкорректируй под себя
+import React, { useEffect, useState } from 'react';
 
 type Tab = 'profile' | 'orders' | 'cart';
+
+interface User {
+  id: number;
+  name: string;
+  email: string;
+}
 
 interface Order {
   id: number;
@@ -10,35 +15,81 @@ interface Order {
   service: string;
 }
 
-export const ProfilePage: React.FC = () => {
+interface CartItem {
+  id: number;
+  service: string;
+  price: number;
+  quantity: number;
+}
+
+const USER_ID = 1; // Пока захардкожен, потом заменить на авторизацию
+
+ export const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('profile');
-
-  // Пример пользователя (можно заменить на данные из API)
-  const [user, setUser] = useState({
-    name: 'Иван Иванов',
-    email: 'ivan@example.com',
-  });
-
+  const [user, setUser] = useState<User | null>(null);
+  const [formData, setFormData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
-  const [formData, setFormData] = useState(user);
+  const [orders, setOrders] = useState<Order[]>([]);
+  const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
-  // Пример заказов (лучше получать из API)
-  const [orders] = useState<Order[]>([
-    { id: 1, createdAt: '2025-05-01T10:00:00Z', status: 'Выполнен', service: 'Чистка от пыли' },
-    { id: 2, createdAt: '2025-05-10T15:30:00Z', status: 'В обработке', service: 'Замена комплектующих' },
-  ]);
+  // Получение данных при монтировании
+  useEffect(() => {
+    fetchUser();
+    fetchOrders();
+    fetchCart();
+  }, []);
 
-  // Берём корзину и методы из контекста
-  const { cartItems, removeFromCart, updateQuantity } = useCart();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  const fetchUser = async () => {
+    const res = await fetch(`/api/profile/${USER_ID}`);
+    const data = await res.json();
+    setUser(data);
+    setFormData(data);
   };
 
-  const handleSaveProfile = () => {
+  const fetchOrders = async () => {
+    const res = await fetch(`/api/orders/${USER_ID}`);
+    const data = await res.json();
+    setOrders(data);
+  };
+
+  const fetchCart = async () => {
+    const res = await fetch(`/api/cart/${USER_ID}`);
+    const data = await res.json();
+    setCartItems(data);
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (formData) {
+      setFormData({ ...formData, [e.target.name]: e.target.value });
+    }
+  };
+
+  const handleSaveProfile = async () => {
+    if (!formData) return;
+    await fetch(`/api/profile/${USER_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
     setUser(formData);
     setEditMode(false);
-    // Здесь можно вызвать API для сохранения профиля
+  };
+
+  const handleRemoveCartItem = async (id: number) => {
+    await fetch(`/api/cart/${USER_ID}/${id}`, {
+      method: 'DELETE',
+    });
+    fetchCart();
+  };
+
+  const handleQuantityChange = async (id: number, quantity: number) => {
+    if (quantity < 1) return;
+    await fetch(`/api/cart/${USER_ID}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quantity }),
+    });
+    fetchCart();
   };
 
   const totalCartPrice = cartItems.reduce(
@@ -50,7 +101,6 @@ export const ProfilePage: React.FC = () => {
     <main className="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-10">
       <h1 className="text-3xl font-bold mb-6 text-center">Личный кабинет</h1>
 
-      {/* Навигация по вкладкам */}
       <nav className="flex justify-center space-x-8 mb-8 border-b">
         {(['profile', 'orders', 'cart'] as Tab[]).map(tab => (
           <button
@@ -69,17 +119,12 @@ export const ProfilePage: React.FC = () => {
         ))}
       </nav>
 
-      {/* Контент вкладок */}
-      {activeTab === 'profile' && (
+      {activeTab === 'profile' && user && (
         <section>
           {!editMode ? (
             <div className="space-y-4">
-              <p>
-                <strong>Имя:</strong> {user.name}
-              </p>
-              <p>
-                <strong>Email:</strong> {user.email}
-              </p>
+              <p><strong>Имя:</strong> {user.name}</p>
+              <p><strong>Email:</strong> {user.email}</p>
               <button
                 onClick={() => setEditMode(true)}
                 className="mt-4 px-4 py-2 bg-violet-600 text-white rounded hover:bg-violet-700"
@@ -94,7 +139,7 @@ export const ProfilePage: React.FC = () => {
                 <input
                   type="text"
                   name="name"
-                  value={formData.name}
+                  value={formData?.name || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full border rounded px-3 py-2"
                 />
@@ -104,7 +149,7 @@ export const ProfilePage: React.FC = () => {
                 <input
                   type="email"
                   name="email"
-                  value={formData.email}
+                  value={formData?.email || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full border rounded px-3 py-2"
                 />
@@ -136,19 +181,19 @@ export const ProfilePage: React.FC = () => {
             <table className="w-full table-auto border-collapse border border-gray-300">
               <thead>
                 <tr className="bg-violet-100">
-                  <th className="border border-gray-300 px-4 py-2 text-left">Номер заказа</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Дата</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Статус</th>
-                  <th className="border border-gray-300 px-4 py-2 text-left">Услуга</th>
+                  <th className="border px-4 py-2">№</th>
+                  <th className="border px-4 py-2">Дата</th>
+                  <th className="border px-4 py-2">Статус</th>
+                  <th className="border px-4 py-2">Услуга</th>
                 </tr>
               </thead>
               <tbody>
                 {orders.map(order => (
-                  <tr key={order.id} className="hover:bg-violet-50">
-                    <td className="border border-gray-300 px-4 py-2">{order.id}</td>
-                    <td className="border border-gray-300 px-4 py-2">{new Date(order.createdAt).toLocaleDateString()}</td>
-                    <td className="border border-gray-300 px-4 py-2">{order.status}</td>
-                    <td className="border border-gray-300 px-4 py-2">{order.service}</td>
+                  <tr key={order.id}>
+                    <td className="border px-4 py-2">{order.id}</td>
+                    <td className="border px-4 py-2">{new Date(order.createdAt).toLocaleDateString()}</td>
+                    <td className="border px-4 py-2">{order.status}</td>
+                    <td className="border px-4 py-2">{order.service}</td>
                   </tr>
                 ))}
               </tbody>
@@ -174,15 +219,14 @@ export const ProfilePage: React.FC = () => {
                       type="number"
                       min={1}
                       value={item.quantity}
-                      onChange={e => updateQuantity(item.id, +e.target.value)}
+                      onChange={e => handleQuantityChange(item.id, +e.target.value)}
                       className="w-16 border rounded px-2 py-1 text-center"
                     />
                     <button
-                      onClick={() => removeFromCart(item.id)}
+                      onClick={() => handleRemoveCartItem(item.id)}
                       className="text-red-600 hover:text-red-800 font-bold"
-                      aria-label={`Удалить ${item.service} из корзины`}
                     >
-                      &times;
+                      ×
                     </button>
                   </div>
                 </div>
