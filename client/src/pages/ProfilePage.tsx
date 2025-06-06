@@ -1,26 +1,19 @@
 import React, { useState } from 'react';
+import { useCart, CartItem } from '../components/CartContext'; // путь к контексту корзины — подкорректируй под себя
 
 type Tab = 'profile' | 'orders' | 'cart';
 
 interface Order {
-  id: number;           // id как number, т.к. в Prisma Int
-  createdAt: string;    // дата как ISO строка
-  status: string;       // статус — строка
-  service: string;      // услуга (если надо)
-  // total можно добавить, если считаешь нужным
-}
-
-interface CartItem {
   id: number;
+  createdAt: string;
+  status: string;
   service: string;
-  price: number;
-  quantity: number;
 }
 
 export const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('profile');
 
-  // Пример пользователя (из API или стейта)
+  // Пример пользователя (можно заменить на данные из API)
   const [user, setUser] = useState({
     name: 'Иван Иванов',
     email: 'ivan@example.com',
@@ -29,17 +22,14 @@ export const ProfilePage: React.FC = () => {
   const [editMode, setEditMode] = useState(false);
   const [formData, setFormData] = useState(user);
 
-  // Пример заказов (здесь лучше получать из API)
+  // Пример заказов (лучше получать из API)
   const [orders] = useState<Order[]>([
     { id: 1, createdAt: '2025-05-01T10:00:00Z', status: 'Выполнен', service: 'Чистка от пыли' },
     { id: 2, createdAt: '2025-05-10T15:30:00Z', status: 'В обработке', service: 'Замена комплектующих' },
   ]);
 
-  // Пример корзины
-  const [cartItems, setCartItems] = useState<CartItem[]>([
-    { id: 1, service: 'Чистка от пыли', price: 1000, quantity: 1 },
-    { id: 2, service: 'Замена комплектующих', price: 2500, quantity: 2 },
-  ]);
+  // Берём корзину и методы из контекста
+  const { cartItems, removeFromCart, updateQuantity } = useCart();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -48,18 +38,7 @@ export const ProfilePage: React.FC = () => {
   const handleSaveProfile = () => {
     setUser(formData);
     setEditMode(false);
-    // Тут вызови API для сохранения, если надо
-  };
-
-  const handleRemoveCartItem = (id: number) => {
-    setCartItems(prev => prev.filter(item => item.id !== id));
-  };
-
-  const handleQuantityChange = (id: number, quantity: number) => {
-    if (quantity < 1) return;
-    setCartItems(prev =>
-      prev.map(item => (item.id === id ? { ...item, quantity } : item))
-    );
+    // Здесь можно вызвать API для сохранения профиля
   };
 
   const totalCartPrice = cartItems.reduce(
@@ -195,11 +174,11 @@ export const ProfilePage: React.FC = () => {
                       type="number"
                       min={1}
                       value={item.quantity}
-                      onChange={e => handleQuantityChange(item.id, +e.target.value)}
+                      onChange={e => updateQuantity(item.id, +e.target.value)}
                       className="w-16 border rounded px-2 py-1 text-center"
                     />
                     <button
-                      onClick={() => handleRemoveCartItem(item.id)}
+                      onClick={() => removeFromCart(item.id)}
                       className="text-red-600 hover:text-red-800 font-bold"
                       aria-label={`Удалить ${item.service} из корзины`}
                     >
