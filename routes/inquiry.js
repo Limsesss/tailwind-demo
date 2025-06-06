@@ -13,9 +13,9 @@ export default (pool) => {
 
     try {
       await pool.query(
-        'INSERT INTO inquiries (name, email, message, created_at) VALUES ($1, $2, $3, NOW())',
-        [name, email, message]
-      );
+        'INSERT INTO inquiries (name, email, message, "createdAt") VALUES ($1, $2, $3, NOW())',
+         [name, email, message]
+        );
 
       res.status(201).json({ success: true });
     } catch (err) {
@@ -27,7 +27,7 @@ export default (pool) => {
   // GET /api/inquiries
   router.get('/', async (req, res) => {
     try {
-      const result = await pool.query('SELECT * FROM inquiries ORDER BY created_at DESC');
+      const result = await pool.query('SELECT * FROM inquiries ORDER BY "createdAt" DESC');
       res.json(result.rows);
     } catch (err) {
       console.error('Ошибка получения заявок:', err);

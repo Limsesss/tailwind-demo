@@ -9,7 +9,7 @@ export default (pool) => {
 
     try {
       const result = await pool.query(
-        'SELECT id, service, created_at FROM "CartItem" WHERE user_id = $1 ORDER BY created_at DESC',
+       'SELECT id, service, "createdAt" FROM "CartItem" WHERE user_id = $1 ORDER BY "createdAt" DESC',
         [userId]
       );
       res.json(result.rows);
