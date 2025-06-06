@@ -14,7 +14,7 @@ export default (pool) => {
       );
       res.json(result.rows);
     } catch (err) {
-      console.error(err);
+      console.error('Ошибка в GET /api/cart/:userId:', err);;
       res.status(500).json({ error: 'Ошибка сервера' });
     }
   });
