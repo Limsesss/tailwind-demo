@@ -19,6 +19,27 @@ export default (pool) => {
     res.status(500).json({ error: 'Ошибка сервера' });
   }
 });
+router.put('/:userId/:itemId', async (req, res) => {
+  const { userId, itemId } = req.params;
+  const { quantity } = req.body;
+
+  if (quantity < 1) return res.status(400).json({ error: 'Количество должно быть >= 1' });
+
+  try {
+    const result = await pool.query(
+      'UPDATE "CartItem" SET quantity = $1 WHERE id = $2 AND "userId" = $3 RETURNING *',
+      [quantity, itemId, userId]
+    );
+
+    if (result.rowCount === 0)
+      return res.status(404).json({ error: 'Элемент корзины не найден' });
+
+    res.json({ success: true, item: result.rows[0] });
+  } catch (err) {
+    console.error('Ошибка обновления количества:', err);
+    res.status(500).json({ error: 'Ошибка обновления количества' });
+  }
+});
 
   // Добавить элемент в корзину
   router.post('/', async (req, res) => {

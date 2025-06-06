@@ -22,25 +22,37 @@ interface CartItem {
   quantity: number;
 }
 
-const USER_ID = 1; // Пока захардкожен, потом заменить на авторизацию
+const USER_ID = 1; // Пока хардкод, потом заменить на авторизацию
 
- export const ProfilePage: React.FC = () => {
+export const ProfilePage: React.FC = () => {
   const [activeTab, setActiveTab] = useState<Tab>('profile');
   const [user, setUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
   const [orders, setOrders] = useState<Order[]>([]);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  // Получение данных при монтировании
   useEffect(() => {
-    fetchUser();
-    fetchOrders();
-    fetchCart();
+    fetchAllData();
   }, []);
+
+  const fetchAllData = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await Promise.all([fetchUser(), fetchOrders(), fetchCart()]);
+    } catch (e) {
+      setError('Ошибка загрузки данных');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchUser = async () => {
     const res = await fetch(`/api/profile/${USER_ID}`);
+    if (!res.ok) throw new Error('Ошибка загрузки профиля');
     const data = await res.json();
     setUser(data);
     setFormData(data);
@@ -48,12 +60,14 @@ const USER_ID = 1; // Пока захардкожен, потом заменит
 
   const fetchOrders = async () => {
     const res = await fetch(`/api/orders/${USER_ID}`);
+    if (!res.ok) throw new Error('Ошибка загрузки заказов');
     const data = await res.json();
     setOrders(data);
   };
 
   const fetchCart = async () => {
     const res = await fetch(`/api/cart/${USER_ID}`);
+    if (!res.ok) throw new Error('Ошибка загрузки корзины');
     const data = await res.json();
     setCartItems(data);
   };
@@ -66,30 +80,55 @@ const USER_ID = 1; // Пока захардкожен, потом заменит
 
   const handleSaveProfile = async () => {
     if (!formData) return;
-    await fetch(`/api/profile/${USER_ID}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    });
-    setUser(formData);
-    setEditMode(false);
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/profile/${USER_ID}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!res.ok) throw new Error('Ошибка сохранения профиля');
+      setUser(formData);
+      setEditMode(false);
+    } catch {
+      setError('Не удалось сохранить профиль');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleRemoveCartItem = async (id: number) => {
-    await fetch(`/api/cart/${USER_ID}/${id}`, {
-      method: 'DELETE',
-    });
-    fetchCart();
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/cart/${USER_ID}/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Ошибка удаления из корзины');
+      await fetchCart();
+    } catch {
+      setError('Не удалось удалить элемент из корзины');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleQuantityChange = async (id: number, quantity: number) => {
     if (quantity < 1) return;
-    await fetch(`/api/cart/${USER_ID}/${id}`, {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ quantity }),
-    });
-    fetchCart();
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await fetch(`/api/cart/${USER_ID}/${id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ quantity }),
+      });
+      if (!res.ok) throw new Error('Ошибка обновления количества');
+      await fetchCart();
+    } catch {
+      setError('Не удалось обновить количество');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const totalCartPrice = cartItems.reduce(
@@ -119,6 +158,9 @@ const USER_ID = 1; // Пока захардкожен, потом заменит
         ))}
       </nav>
 
+      {loading && <p className="text-center text-gray-500">Загрузка...</p>}
+      {error && <p className="text-center text-red-600 mb-4">{error}</p>}
+
       {activeTab === 'profile' && user && (
         <section>
           {!editMode ? (
@@ -142,6 +184,7 @@ const USER_ID = 1; // Пока захардкожен, потом заменит
                   value={formData?.name || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full border rounded px-3 py-2"
+                  disabled={loading}
                 />
               </label>
               <label className="block">
@@ -152,18 +195,24 @@ const USER_ID = 1; // Пока захардкожен, потом заменит
                   value={formData?.email || ''}
                   onChange={handleChange}
                   className="mt-1 block w-full border rounded px-3 py-2"
+                  disabled={loading}
                 />
               </label>
               <div className="flex space-x-4 mt-4">
                 <button
                   onClick={handleSaveProfile}
                   className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+                  disabled={loading}
                 >
                   Сохранить
                 </button>
                 <button
-                  onClick={() => setEditMode(false)}
+                  onClick={() => {
+                    setEditMode(false);
+                    setFormData(user);
+                  }}
                   className="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400"
+                  disabled={loading}
                 >
                   Отмена
                 </button>
@@ -221,10 +270,12 @@ const USER_ID = 1; // Пока захардкожен, потом заменит
                       value={item.quantity}
                       onChange={e => handleQuantityChange(item.id, +e.target.value)}
                       className="w-16 border rounded px-2 py-1 text-center"
+                      disabled={loading}
                     />
                     <button
                       onClick={() => handleRemoveCartItem(item.id)}
                       className="text-red-600 hover:text-red-800 font-bold"
+                      disabled={loading}
                     >
                       ×
                     </button>
@@ -237,6 +288,7 @@ const USER_ID = 1; // Пока захардкожен, потом заменит
               <button
                 className="mt-4 px-6 py-2 bg-green-600 text-white rounded hover:bg-green-700"
                 onClick={() => alert('Оформление заказа пока не реализовано')}
+                disabled={loading}
               >
                 Оформить заказ
               </button>
