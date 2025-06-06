@@ -9,8 +9,8 @@ export default (pool) => {
 
     try {
       const result = await pool.query(
-       'SELECT id, service, status, "createdAt" FROM "Order" WHERE user_id = $1 ORDER BY "createdAt" DESC',
-       [userId]
+        'SELECT id, service, status, "createdAt" FROM "Order" WHERE user_id = $1 ORDER BY "createdAt" DESC',
+        [userId]
       );
       res.json(result.rows);
     } catch (err) {
@@ -26,7 +26,7 @@ export default (pool) => {
 
     try {
       await pool.query(
-        'INSERT INTO "Order" (user_id, service, status, created_at) VALUES ($1, $2, $3, NOW())',
+        'INSERT INTO "Order" (user_id, service, status, "createdAt") VALUES ($1, $2, $3, NOW())',
         [userId, service, 'новый']
       );
       res.status(201).json({ success: true });
@@ -61,7 +61,7 @@ export default (pool) => {
 
       // Создаем заказ
       const orderResult = await pool.query(
-        'INSERT INTO "Order" (user_id, service, status, created_at, total) VALUES ($1, $2, $3, NOW(), $4) RETURNING id',
+        'INSERT INTO "Order" (user_id, service, status, "createdAt", total) VALUES ($1, $2, $3, NOW(), $4) RETURNING id',
         [userId, servicesList, 'новый', total]
       );
       const orderId = orderResult.rows[0].id;

@@ -8,7 +8,10 @@ export default (pool) => {
   router.get('/:userId', async (req, res) => {
     const { userId } = req.params;
     try {
-      const result = await pool.query('SELECT id, email, name, "createdAt" FROM users WHERE id = $1', [userId]);
+      const result = await pool.query(
+        'SELECT id, email, name, "createdAt" FROM "User" WHERE id = $1',
+        [userId]
+      );
       if (result.rows.length === 0)
         return res.status(404).json({ error: 'Пользователь не найден' });
       res.json(result.rows[0]);
@@ -28,7 +31,7 @@ export default (pool) => {
 
     try {
       await pool.query(
-        'UPDATE users SET name = $1, email = $2 WHERE id = $3',
+        'UPDATE "User" SET name = $1, email = $2 WHERE id = $3',
         [name, email, userId]
       );
       res.json({ success: true });
@@ -47,7 +50,10 @@ export default (pool) => {
       return res.status(400).json({ error: 'Оба пароля обязательны' });
 
     try {
-      const result = await pool.query('SELECT password FROM users WHERE id = $1', [userId]);
+      const result = await pool.query(
+        'SELECT password FROM "User" WHERE id = $1',
+        [userId]
+      );
       if (result.rows.length === 0)
         return res.status(404).json({ error: 'Пользователь не найден' });
 
@@ -58,7 +64,7 @@ export default (pool) => {
         return res.status(403).json({ error: 'Старый пароль неверен' });
 
       const newHash = await bcrypt.hash(newPassword, 10);
-      await pool.query('UPDATE users SET password = $1 WHERE id = $2', [newHash, userId]);
+      await pool.query('UPDATE "User" SET password = $1 WHERE id = $2', [newHash, userId]);
 
       res.json({ success: true });
     } catch (err) {
