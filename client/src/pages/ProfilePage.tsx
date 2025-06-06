@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 type Tab = 'profile' | 'orders' | 'cart';
 
@@ -22,10 +23,14 @@ interface CartItem {
   quantity: number;
 }
 
-const USER_ID = 1; // Пока хардкод, потом заменить на авторизацию
+const USER_ID = 1; // Хардкод пока
 
 export const ProfilePage: React.FC = () => {
-  const [activeTab, setActiveTab] = useState<Tab>('profile');
+  const { '*': activeTabParam } = useParams<{ '*': string }>(); // catch-all param
+  const navigate = useNavigate();
+
+  const activeTab = (activeTabParam as Tab) || 'profile';
+
   const [user, setUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<User | null>(null);
   const [editMode, setEditMode] = useState(false);
@@ -34,42 +39,60 @@ export const ProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
+  // Загрузка данных в зависимости от вкладки
   useEffect(() => {
-    fetchAllData();
-  }, []);
-
-  const fetchAllData = async () => {
-    setLoading(true);
     setError(null);
+
+    if (activeTab === 'profile') {
+      fetchUser();
+    } else if (activeTab === 'orders') {
+      fetchOrders();
+    } else if (activeTab === 'cart') {
+      fetchCart();
+    }
+  }, [activeTab]);
+
+  const fetchUser = async () => {
+    setLoading(true);
     try {
-      await Promise.all([fetchUser(), fetchOrders(), fetchCart()]);
-    } catch (e) {
-      setError('Ошибка загрузки данных');
+      const res = await fetch(`/api/profile/${USER_ID}`);
+      if (!res.ok) throw new Error('Ошибка загрузки профиля');
+      const data = await res.json();
+      setUser(data);
+      setFormData(data);
+    } catch {
+      setError('Ошибка загрузки профиля');
     } finally {
       setLoading(false);
     }
   };
 
-  const fetchUser = async () => {
-    const res = await fetch(`/api/profile/${USER_ID}`);
-    if (!res.ok) throw new Error('Ошибка загрузки профиля');
-    const data = await res.json();
-    setUser(data);
-    setFormData(data);
-  };
-
   const fetchOrders = async () => {
-    const res = await fetch(`/api/orders/${USER_ID}`);
-    if (!res.ok) throw new Error('Ошибка загрузки заказов');
-    const data = await res.json();
-    setOrders(data);
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/orders/${USER_ID}`);
+      if (!res.ok) throw new Error('Ошибка загрузки заказов');
+      const data = await res.json();
+      setOrders(data);
+    } catch {
+      setError('Ошибка загрузки заказов');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const fetchCart = async () => {
-    const res = await fetch(`/api/cart/${USER_ID}`);
-    if (!res.ok) throw new Error('Ошибка загрузки корзины');
-    const data = await res.json();
-    setCartItems(data);
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/cart/${USER_ID}`);
+      if (!res.ok) throw new Error('Ошибка загрузки корзины');
+      const data = await res.json();
+      setCartItems(data);
+    } catch {
+      setError('Ошибка загрузки корзины');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -136,6 +159,11 @@ export const ProfilePage: React.FC = () => {
     0
   );
 
+  // Переключение вкладок меняет URL
+  const onTabClick = (tab: Tab) => {
+    navigate(tab === 'profile' ? '/profile' : `/profile/${tab}`);
+  };
+
   return (
     <main className="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-10">
       <h1 className="text-3xl font-bold mb-6 text-center">Личный кабинет</h1>
@@ -144,7 +172,7 @@ export const ProfilePage: React.FC = () => {
         {(['profile', 'orders', 'cart'] as Tab[]).map(tab => (
           <button
             key={tab}
-            onClick={() => setActiveTab(tab)}
+            onClick={() => onTabClick(tab)}
             className={`pb-2 text-lg font-medium ${
               activeTab === tab
                 ? 'border-b-4 border-violet-600 text-violet-600'
