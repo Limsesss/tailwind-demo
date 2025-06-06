@@ -3,6 +3,11 @@ import { Pool } from 'pg';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
+import inquiryRoutes from './routes/inquiry.js';
+import profileRoutes from './routes/profile.js';
+import ordersRoutes from './routes/orders.js';
+import cartRoutes from './routes/cart.js';
+
 const app = express();
 
 // Получаем текущую директорию
@@ -16,6 +21,11 @@ const pool = new Pool({
 });
 
 app.use(express.json());
+
+app.use('/api/inquiry', inquiryRoutes(pool));
+app.use('/api/profile', profileRoutes(pool));
+app.use('/api/orders', ordersRoutes(pool));
+app.use('/api/cart', cartRoutes(pool));
 
 // Тестовый маршрут для проверки подключения к БД
 app.get('/api/test', async (req, res) => {
