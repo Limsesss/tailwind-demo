@@ -34,6 +34,51 @@ const SERVICES: Service[] = [
     description: 'Установка Windows',
     price: 1500,
   },
+   {
+    id: 3,
+    title: 'Установка Windows',
+    shortDescription: 'Лицензионная установка Windows 10/11',
+    fullDescription: 'Полная переустановка Windows с драйверами и настройкой.',
+    image: '',
+    description: 'Установка Windows',
+    price: 1500,
+  },
+   {
+    id: 4,
+    title: 'Установка Windows',
+    shortDescription: 'Лицензионная установка Windows 10/11',
+    fullDescription: 'Полная переустановка Windows с драйверами и настройкой.',
+    image: '',
+    description: 'Установка Windows',
+    price: 1500,
+  },
+   {
+    id: 5,
+    title: 'Установка Windows',
+    shortDescription: 'Лицензионная установка Windows 10/11',
+    fullDescription: 'Полная переустановка Windows с драйверами и настройкой.',
+    image: '',
+    description: 'Установка Windows',
+    price: 1500,
+  },
+   {
+    id: 6,
+    title: 'Установка Windows',
+    shortDescription: 'Лицензионная установка Windows 10/11',
+    fullDescription: 'Полная переустановка Windows с драйверами и настройкой.',
+    image: '',
+    description: 'Установка Windows',
+    price: 1500,
+  },
+   {
+    id: 7,
+    title: 'Установка Windows',
+    shortDescription: 'Лицензионная установка Windows 10/11',
+    fullDescription: 'Полная переустановка Windows с драйверами и настройкой.',
+    image: '',
+    description: 'Установка Windows',
+    price: 1500,
+  },
 ];
 
 export const ServicesPage: React.FC = () => {
@@ -41,14 +86,20 @@ export const ServicesPage: React.FC = () => {
   const navigate = useNavigate();
   const [notificationMessage, setNotificationMessage] = useState<string | null>(null);
 
-  const handleAddToCart = (service: Service) => {
-    addToCart({
+  const handleAddToCart = async (service: Service) => {
+  try {
+    await addToCart({
       id: service.id,
       service: service.title,
       price: service.price,
     });
     setNotificationMessage(`"${service.title}" добавлена в корзину`);
-  };
+  } catch (error) {
+    alert('Ошибка добавления: ' + (error instanceof Error ? error.message : 'Неизвестная ошибка'));
+  }
+};
+
+  
 
   return (
     <main className="bg-gray-50 min-h-screen py-20 px-4">
