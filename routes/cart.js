@@ -9,7 +9,7 @@ export default (pool) => {
 
     try {
       const result = await pool.query(
-        'SELECT id, service, created_at FROM cart_items WHERE user_id = $1 ORDER BY created_at DESC',
+        'SELECT id, service, created_at FROM "CartItem" WHERE user_id = $1 ORDER BY created_at DESC',
         [userId]
       );
       res.json(result.rows);
@@ -26,7 +26,7 @@ export default (pool) => {
 
     try {
       await pool.query(
-        'INSERT INTO cart_items (user_id, service, created_at) VALUES ($1, $2, NOW())',
+        'INSERT INTO "CartItem" (user_id, service, created_at) VALUES ($1, $2, NOW())',
         [userId, service]
       );
       res.status(201).json({ success: true });
@@ -41,7 +41,7 @@ export default (pool) => {
     const { itemId } = req.params;
 
     try {
-      await pool.query('DELETE FROM cart_items WHERE id = $1', [itemId]);
+      await pool.query('DELETE FROM "CartItem" WHERE id = $1', [itemId]);
       res.json({ success: true });
     } catch (err) {
       console.error(err);
