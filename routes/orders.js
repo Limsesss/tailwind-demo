@@ -9,7 +9,7 @@ export default (pool) => {
 
     try {
       const result = await pool.query(
-        'SELECT id, service, status, "createdAt" FROM "Order" WHERE user_id = $1 ORDER BY "createdAt" DESC',
+        'SELECT id, service, status, "createdAt" FROM "Order" WHERE "userId" = $1 ORDER BY "createdAt" DESC',
         [userId]
       );
       res.json(result.rows);
@@ -26,7 +26,7 @@ export default (pool) => {
 
     try {
       await pool.query(
-        'INSERT INTO "Order" (user_id, service, status, "createdAt") VALUES ($1, $2, $3, NOW())',
+        'INSERT INTO "Order" ("userId", service, status, "createdAt") VALUES ($1, $2, $3, NOW())',
         [userId, service, 'новый']
       );
       res.status(201).json({ success: true });
@@ -44,7 +44,7 @@ export default (pool) => {
     try {
       // Получаем содержимое корзины пользователя
       const cartResult = await pool.query(
-        'SELECT id, service, price, quantity FROM "CartItem" WHERE user_id = $1',
+        'SELECT id, service, price, quantity FROM "CartItem" WHERE "userId" = $1',
         [userId]
       );
 
@@ -61,13 +61,13 @@ export default (pool) => {
 
       // Создаем заказ
       const orderResult = await pool.query(
-        'INSERT INTO "Order" (user_id, service, status, "createdAt", total) VALUES ($1, $2, $3, NOW(), $4) RETURNING id',
+        'INSERT INTO "Order" ("userId", service, status, "createdAt", total) VALUES ($1, $2, $3, NOW(), $4) RETURNING id',
         [userId, servicesList, 'новый', total]
       );
       const orderId = orderResult.rows[0].id;
 
       // Очищаем корзину
-      await pool.query('DELETE FROM "CartItem" WHERE user_id = $1', [userId]);
+      await pool.query('DELETE FROM "CartItem" WHERE "userId" = $1', [userId]);
 
       res.status(201).json({ success: true, orderId, total });
     } catch (err) {

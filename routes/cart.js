@@ -46,6 +46,8 @@ export default (pool) => {
     }
   });
 
+  
+
   // Добавить элемент в корзину
   router.post('/', async (req, res) => {
     const { userId, service, price, quantity } = req.body;
