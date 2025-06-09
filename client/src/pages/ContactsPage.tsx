@@ -9,6 +9,7 @@ export const ContactsPage: React.FC = () => {
         {/* Контактная информация */}
         <section className="flex-1 space-y-6 text-gray-700 text-lg">
           <p><strong>Адрес:</strong> г. Псков, ул. Ремонтная, д. 15</p>
+          <p><strong>Часы работы:</strong> Пн–Сб: 10:00–20:00, Вс: выходной</p>
           <p>
             <strong>Телефон:</strong>{' '}
             <a href="tel:+78123456789" className="text-violet-600 hover:underline">
@@ -21,6 +22,32 @@ export const ContactsPage: React.FC = () => {
               support@remont-pc.ru
             </a>
           </p>
+          <section className="mt-12">
+  <h2 className="text-2xl font-semibold text-violet-700 mb-4">Напишите нам</h2>
+  <form className="space-y-4">
+    <input
+      type="text"
+      placeholder="Ваше имя"
+      className="w-full px-4 py-2 border rounded-lg"
+    />
+    <input
+      type="email"
+      placeholder="Ваш email"
+      className="w-full px-4 py-2 border rounded-lg"
+    />
+    <textarea
+      placeholder="Сообщение"
+      rows={4}
+      className="w-full px-4 py-2 border rounded-lg"
+    />
+    <button
+      type="submit"
+      className="bg-violet-600 text-white px-6 py-2 rounded-lg hover:bg-violet-700 transition"
+    >
+      Отправить сообщение
+    </button>
+  </form>
+</section>
 
           {/* Соцсети или быстрые действия */}
           <div className="mt-8 flex space-x-6">
