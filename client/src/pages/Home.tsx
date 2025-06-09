@@ -2,6 +2,7 @@ import React from "react";
 import ServiceCard from "../components/ServiceCard";
 import { motion } from "framer-motion";
 import FAQSection from "../components/FAQSection";
+import ContactForm from "components/ContactForm";
 
 const services = [
   {
@@ -122,6 +123,7 @@ const Home: React.FC = () => {
           ))}
         </div>
       </section>
+      <ContactForm />
     </main>
   );
 };
