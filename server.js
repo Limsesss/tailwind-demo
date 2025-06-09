@@ -7,6 +7,7 @@ import inquiryRoutes from './routes/inquiry.js';
 import profileRoutes from './routes/profile.js';
 import ordersRoutes from './routes/orders.js';
 import cartRoutes from './routes/cart.js';
+import authRoutes from './routes/auth.js';
 
 const app = express();
 
@@ -26,6 +27,7 @@ app.use('/api/inquiry', inquiryRoutes(pool));
 app.use('/api/profile', profileRoutes(pool));
 app.use('/api/orders', ordersRoutes(pool));
 app.use('/api/cart', cartRoutes(pool));
+app.use('/api/auth', authRoutes(pool));
 
 // Тестовый маршрут для проверки подключения к БД
 app.get('/api/test', async (req, res) => {

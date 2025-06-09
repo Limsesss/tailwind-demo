@@ -23,7 +23,8 @@ interface CartItem {
   quantity: number;
 }
 
-const USER_ID = 1; // Хардкод пока
+const storedUserId = localStorage.getItem('userId');
+const userId = storedUserId ? parseInt(storedUserId, 10) : null;
 
 export const ProfilePage: React.FC = () => {
   const { '*': activeTabParam } = useParams<{ '*': string }>(); // catch-all param
@@ -55,7 +56,7 @@ export const ProfilePage: React.FC = () => {
   const fetchUser = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/profile/${USER_ID}`);
+      const res = await fetch(`/api/profile/${userId}`);
       if (!res.ok) throw new Error('Ошибка загрузки профиля');
       const data = await res.json();
       setUser(data);
@@ -70,7 +71,7 @@ export const ProfilePage: React.FC = () => {
   const fetchOrders = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/orders/${USER_ID}`);
+      const res = await fetch(`/api/orders/${userId}`);
       if (!res.ok) throw new Error('Ошибка загрузки заказов');
       const data = await res.json();
       setOrders(data);
@@ -84,7 +85,7 @@ export const ProfilePage: React.FC = () => {
   const fetchCart = async () => {
     setLoading(true);
     try {
-      const res = await fetch(`/api/cart/${USER_ID}`);
+      const res = await fetch(`/api/cart/${userId}`);
       if (!res.ok) throw new Error('Ошибка загрузки корзины');
       const data = await res.json();
       setCartItems(data);
@@ -106,7 +107,7 @@ export const ProfilePage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/profile/${USER_ID}`, {
+      const res = await fetch(`/api/profile/${userId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -125,7 +126,7 @@ export const ProfilePage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/cart/${USER_ID}/${id}`, { method: 'DELETE' });
+      const res = await fetch(`/api/cart/${userId}/${id}`, { method: 'DELETE' });
       if (!res.ok) throw new Error('Ошибка удаления из корзины');
       await fetchCart();
     } catch {
@@ -140,7 +141,7 @@ export const ProfilePage: React.FC = () => {
     setLoading(true);
     setError(null);
     try {
-      const res = await fetch(`/api/cart/${USER_ID}/${id}`, {
+      const res = await fetch(`/api/cart/${userId}/${id}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ quantity }),
@@ -164,10 +165,119 @@ export const ProfilePage: React.FC = () => {
     navigate(tab === 'profile' ? '/profile' : `/profile/${tab}`);
   };
 
+  if (!userId) {
+  const [authTab, setAuthTab] = useState<'login' | 'register'>('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [name, setName] = useState('');
+  const [authError, setAuthError] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Ошибка входа');
+      localStorage.setItem('userId', data.user.id);
+      window.location.reload();
+    } catch (err: any) {
+      setAuthError(err.message);
+    }
+  };
+
+  const handleRegister = async () => {
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, name }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || 'Ошибка регистрации');
+      localStorage.setItem('userId', data.user.id);
+      window.location.reload();
+    } catch (err: any) {
+      setAuthError(err.message);
+    }
+  };
+
+  return (
+    <main className="max-w-md mx-auto mt-10 p-6 bg-white rounded shadow">
+      <h2 className="text-2xl font-bold text-center mb-6">
+        {authTab === 'login' ? 'Вход в аккаунт' : 'Регистрация'}
+      </h2>
+      <div className="flex justify-center mb-4 space-x-4">
+        <button
+          onClick={() => setAuthTab('login')}
+          className={`px-4 py-2 rounded ${
+            authTab === 'login' ? 'bg-violet-600 text-white' : 'bg-gray-200'
+          }`}
+        >
+          Вход
+        </button>
+        <button
+          onClick={() => setAuthTab('register')}
+          className={`px-4 py-2 rounded ${
+            authTab === 'register' ? 'bg-violet-600 text-white' : 'bg-gray-200'
+          }`}
+        >
+          Регистрация
+        </button>
+      </div>
+
+      {authTab === 'register' && (
+        <input
+          className="w-full p-2 border mb-3 rounded"
+          placeholder="Имя"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+        />
+      )}
+      <input
+        className="w-full p-2 border mb-3 rounded"
+        placeholder="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+      />
+      <input
+        className="w-full p-2 border mb-3 rounded"
+        placeholder="Пароль"
+        type="password"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+      />
+
+      {authError && <p className="text-red-500 mb-4">{authError}</p>}
+
+      <button
+        onClick={authTab === 'login' ? handleLogin : handleRegister}
+        className="w-full bg-violet-600 text-white py-2 rounded hover:bg-violet-700"
+      >
+        {authTab === 'login' ? 'Войти' : 'Зарегистрироваться'}
+      </button>
+    </main>
+  );
+}
+
+
   return (
     <main className="max-w-4xl mx-auto p-6 bg-white rounded shadow mt-10">
-      <h1 className="text-3xl font-bold mb-6 text-center">Личный кабинет</h1>
-
+      <div className="flex justify-between items-center mb-6">
+  <h1 className="text-3xl font-bold">Личный кабинет</h1>
+  <button
+  onClick={() => {
+    localStorage.removeItem('userId');
+    window.location.reload();
+  }}
+  className="px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300"
+>
+  Выйти
+</button>
+</div>
       <nav className="flex justify-center space-x-8 mb-8 border-b">
         {(['profile', 'orders', 'cart'] as Tab[]).map(tab => (
           <button
