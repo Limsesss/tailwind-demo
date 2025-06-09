@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface AuthFormProps {
   onLoginSuccess: (userId: number) => void;
@@ -11,6 +12,8 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLoginSuccess }) => {
   const [name, setName] = useState('');
   const [authError, setAuthError] = useState('');
 
+  const navigate = useNavigate();
+
   const handleLogin = async () => {
     try {
       const res = await fetch('/api/auth/login', {
@@ -21,6 +24,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLoginSuccess }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Ошибка входа');
       onLoginSuccess(data.user.id);
+      navigate('/profile'); // переход на профиль после логина
     } catch (err: any) {
       setAuthError(err.message);
     }
@@ -36,6 +40,7 @@ export const AuthForm: React.FC<AuthFormProps> = ({ onLoginSuccess }) => {
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || 'Ошибка регистрации');
       onLoginSuccess(data.user.id);
+      navigate('/profile'); // переход на профиль после регистрации
     } catch (err: any) {
       setAuthError(err.message);
     }
