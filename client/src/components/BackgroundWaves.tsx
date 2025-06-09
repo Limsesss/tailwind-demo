@@ -1,5 +1,5 @@
 import React from 'react';
-import '../waves.css'; // Подключим стили анимации
+import '../styles/waves.css' // Подключим стили анимации
 
 const BackgroundWaves: React.FC = () => {
   return (
