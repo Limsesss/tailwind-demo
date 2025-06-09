@@ -3,7 +3,7 @@ import ServiceCard from "../components/ServiceCard";
 import { motion } from "framer-motion";
 import FAQSection from "../components/FAQSection";
 import ContactForm from "components/ContactForm";
-import BackgroundWaves from "components/BackgroundWaves";
+import BackgroundWaves from "../components/BackgroundWaves";
 
 const services = [
   {
