@@ -8,21 +8,18 @@ import { ContactsPage } from './pages/ContactsPage';
 import AdminInquiriesPage from './pages/AdminInquiriesPage';
 import { CartProvider } from './components/CartContext';
 import Home from './pages/Home'; // ✅ Добавляем импорт
+import BackgroundWaves from 'components/BackgroundWaves';
 
 export const App: React.FC = () => {
   return (
     <Router>
       <CartProvider>
-        <div className="relative min-h-screen flex flex-col overflow-hidden">
-          {/* Анимированный градиентный фон */}
-          <div
-            className="absolute inset-0 -z-10 animate-gradient-x bg-gradient-to-r from-violet-100 via-violet-300 to-violet-100 bg-[length:200%_200%] opacity-60"
-          />
-
+        <div className="min-h-screen flex flex-col">
+           <BackgroundWaves /> {/* 🌊 Анимированный фон */}
           <Header />
           <main className="flex-grow">
             <Routes>
-              <Route path="/" element={<Home />} />
+              <Route path="/" element={<Home />} /> {/* ✅ Здесь теперь Home */}
               <Route path="/services" element={<ServicesPage />} />
               <Route path="/profile/*" element={<ProfilePage />} />
               <Route path="/contacts" element={<ContactsPage />} />
@@ -35,6 +32,5 @@ export const App: React.FC = () => {
     </Router>
   );
 };
-
 
 export default App;

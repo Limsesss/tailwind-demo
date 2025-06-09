@@ -5,24 +5,17 @@ export default {
     "./src/**/*.{js,ts,jsx,tsx}"
   ],
   theme: {
-    extend: {},
-  },
-  plugins: [],
-}
-
-module.exports = {
-  // ...
-  theme: {
     extend: {
       animation: {
-        'gradient-x': 'gradient-x 15s ease infinite',
+        wave: 'waveAnim 10s ease-in-out infinite',
       },
       keyframes: {
-        'gradient-x': {
-          '0%, 100%': { backgroundPosition: '0% 50%' },
-          '50%': { backgroundPosition: '100% 50%' },
+        waveAnim: {
+          '0%, 100%': { transform: 'translateX(0)' },
+          '50%': { transform: 'translateX(-50px)' },
         },
       },
     },
   },
-};
+  plugins: [],
+}
