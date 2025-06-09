@@ -123,7 +123,6 @@ const Home: React.FC = () => {
           ))}
         </div>
       </section>
-      <ContactForm />
     </main>
   );
 };
