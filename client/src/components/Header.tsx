@@ -7,7 +7,7 @@ export const Header: React.FC = () => {
   const toggleMenu = () => setIsOpen(prev => !prev);
 
   return (
-    <header className="bg-violet-900 text-white p-4 flex justify-between items-center">
+    <header className="relative z-20 bg-violet-900 text-white p-4 flex justify-between items-center">
       <div className="text-xl font-bold">Ремонт компьютерной техники "FixikPro"</div>
 
       {/* Кнопка-бургер */}
