@@ -8,7 +8,7 @@ import { ContactsPage } from './pages/ContactsPage';
 import AdminInquiriesPage from './pages/AdminInquiriesPage';
 import { CartProvider } from './components/CartContext';
 import Home from './pages/Home'; // ✅ Добавляем импорт
-import BackgroundWaves from 'components/BackgroundWaves';
+import BackgroundWaves from './components/BackgroundWaves';
 
 export const App: React.FC = () => {
   return (
