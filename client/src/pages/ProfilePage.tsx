@@ -1,5 +1,5 @@
-import AuthForm from 'components/AuthForm';
-import ProfileTabs from 'components/ProfileTabs';
+import AuthForm from '../components/AuthForm';
+import ProfileTabs from '../components/ProfileTabs';
 import React, { useState, useEffect } from 'react';
 
 export const ProfilePage: React.FC = () => {
