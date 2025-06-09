@@ -1,0 +1,21 @@
+/* src/styles/waves.css */
+.wave-wrapper {
+  display: flex;
+  width: 2880px; /* 2 x 1440 */
+  animation: wave-loop 30s linear infinite;
+}
+
+.wave-svg {
+  width: 1440px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+@keyframes wave-loop {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-1440px);
+  }
+}
