@@ -2,7 +2,7 @@ import React from 'react';
 
 const BackgroundWaves: React.FC = () => {
   return (
-    <div className="absolute top-0 left-0 w-full h-64 z-0 overflow-hidden pointer-events-none">
+    <div className="absolute top-0 left-0 w-full h-64 -z-10 overflow-hidden pointer-events-none">
       <svg
         className="w-full h-full"
         viewBox="0 0 1440 320"
