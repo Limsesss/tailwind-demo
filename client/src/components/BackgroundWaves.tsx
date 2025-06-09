@@ -3,7 +3,7 @@ import '../styles/waves.css' // Подключим стили анимации
 
 const BackgroundWaves: React.FC = () => {
   return (
-    <div className="absolute top-0 left-0 w-full h-64 -z-10 overflow-hidden pointer-events-none">
+    <div className="absolute top-0 left-0 w-full h-64 -z-5 overflow-hidden pointer-events-none">
       <div className="wave-wrapper">
         <svg
           className="wave-svg"
