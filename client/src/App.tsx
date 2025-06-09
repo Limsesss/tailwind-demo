@@ -14,7 +14,7 @@ export const App: React.FC = () => {
   return (
     <Router>
       <CartProvider>
-        <div className="min-h-screen flex flex-col">
+        <div className="min-h-screen flex flex-col relative">
            <BackgroundWaves /> {/* 🌊 Анимированный фон */}
           <Header />
           <main className="flex-grow">
