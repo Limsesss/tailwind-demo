@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useCart } from '../components/CartContext';
 import { Notification } from '../components/Notification';
 import { motion } from 'framer-motion';
+import BackgroundWaves from '../components/BackgroundWaves';
 
 interface Service {
   id: number;
@@ -129,7 +130,8 @@ export const ServicesPage: React.FC = () => {
   
 
   return (
-    <main className="bg-gray-50 min-h-screen py-20 px-4">
+    <main className="relative bg-gray-50 min-h-screen py-16 px-4 overflow-hidden">
+      <BackgroundWaves />
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
