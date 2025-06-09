@@ -3,9 +3,8 @@ import React from 'react';
 const BackgroundWaves: React.FC = () => {
   return (
     <div className="absolute top-0 left-0 w-full h-64 -z-5 overflow-hidden pointer-events-none">
-
       <svg
-        className="w-full h-full"
+        className="w-full h-full animate-wave"
         viewBox="0 0 1440 320"
         preserveAspectRatio="none"
         xmlns="http://www.w3.org/2000/svg"
