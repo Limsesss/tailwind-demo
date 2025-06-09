@@ -132,7 +132,7 @@ export const ServicesPage: React.FC = () => {
   return (
     <main className="relative bg-gray-50 min-h-screen py-16 px-4 overflow-hidden">
       {/* Фоновые волны — абсолютное позиционирование и низкий z-index */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-5">
         <BackgroundWaves />
       </div>
 

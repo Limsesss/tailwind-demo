@@ -1,12 +1,13 @@
+import BackgroundWaves from '../components/BackgroundWaves';
 import React from 'react';
 
 export const ContactsPage: React.FC = () => {
   return (
     <main className="relative min-h-screen bg-gray-50 py-16 px-4 overflow-hidden">
       {/* Фоновая волна с низким z-index */}
-      <div className="absolute inset-0 -z-10">
+      <div className="absolute inset-0 -z-5">
         {/* Подключи BackgroundWaves, если нужно */}
-        {/* <BackgroundWaves /> */}
+       <BackgroundWaves /> 
         <div className="absolute inset-0 bg-gradient-to-br from-violet-100 to-white opacity-30"></div>
       </div>
 
