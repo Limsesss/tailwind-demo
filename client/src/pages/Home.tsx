@@ -66,7 +66,44 @@ const Home: React.FC = () => {
           <p className="text-gray-600">Прозрачная ценовая политика и без навязывания услуг.</p>
         </div>
       </section>
-
+      <section className="max-w-6xl mx-auto my-24 px-4">
+  <h2 className="text-3xl font-bold text-violet-700 mb-10 text-center">Как мы работаем</h2>
+  <div className="grid grid-cols-1 sm:grid-cols-4 gap-6 text-center">
+    <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 className="text-xl font-semibold mb-2 text-violet-600">1. Заявка</h3>
+      <p className="text-gray-600">Оставляете заявку на сайте или звоните нам.</p>
+    </div>
+    <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 className="text-xl font-semibold mb-2 text-violet-600">2. Диагностика</h3>
+      <p className="text-gray-600">Проводим проверку и озвучиваем стоимость ремонта.</p>
+    </div>
+    <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 className="text-xl font-semibold mb-2 text-violet-600">3. Ремонт</h3>
+      <p className="text-gray-600">Выполняем ремонт и тестируем технику.</p>
+    </div>
+    <div className="bg-white p-6 rounded-xl shadow hover:shadow-lg transition">
+      <h3 className="text-xl font-semibold mb-2 text-violet-600">4. Готово!</h3>
+      <p className="text-gray-600">Вы получаете исправное устройство с гарантией.</p>
+    </div>
+  </div>
+</section>
+<section className="max-w-6xl mx-auto my-24 px-4">
+  <h2 className="text-3xl font-bold text-violet-700 mb-10 text-center">Отзывы клиентов</h2>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    <div className="bg-white p-6 rounded-xl shadow">
+      <p className="text-gray-700 italic">"Отдал ноутбук на чистку — сделали в тот же день, теперь работает тише и не греется. Спасибо!"</p>
+      <p className="mt-4 text-violet-700 font-semibold">— Алексей К.</p>
+    </div>
+    <div className="bg-white p-6 rounded-xl shadow">
+      <p className="text-gray-700 italic">"Установили SSD и Windows — теперь компьютер просто летает. Очень доволен!"</p>
+      <p className="mt-4 text-violet-700 font-semibold">— Ирина Л.</p>
+    </div>
+    <div className="bg-white p-6 rounded-xl shadow">
+      <p className="text-gray-700 italic">"Ребята приехали на дом, быстро всё настроили и объяснили, как пользоваться. Отличный сервис."</p>
+      <p className="mt-4 text-violet-700 font-semibold">— Дмитрий С.</p>
+    </div>
+  </div>
+</section>
       {/* Services Section */}
       <section className="max-w-7xl mx-auto">
         <h2 className="text-3xl font-bold text-violet-700 mb-8 text-center">Популярные услуги</h2>
