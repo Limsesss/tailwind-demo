@@ -131,8 +131,13 @@ export const ServicesPage: React.FC = () => {
 
   return (
     <main className="relative bg-gray-50 min-h-screen py-16 px-4 overflow-hidden">
-      <BackgroundWaves />
-      <div className="max-w-7xl mx-auto">
+      {/* Фоновые волны — абсолютное позиционирование и низкий z-index */}
+      <div className="absolute inset-0 -z-10">
+        <BackgroundWaves />
+      </div>
+
+      {/* Контент поверх волн */}
+      <div className="relative z-10 max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">
           <div>
@@ -155,7 +160,7 @@ export const ServicesPage: React.FC = () => {
           </button>
         </div>
 
-        {/* Services Grid */}
+        {/* Сетка с карточками */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {SERVICES.map((service, index) => (
             <motion.div
@@ -166,14 +171,14 @@ export const ServicesPage: React.FC = () => {
             >
               <ServiceCard
                 {...service}
-                onAddToCart={() => handleAddToCart(service)} // ⬅️ кастомное поведение
+                onAddToCart={() => handleAddToCart(service)}
               />
             </motion.div>
           ))}
         </div>
       </div>
 
-      {/* Notification */}
+      {/* Уведомление */}
       {notificationMessage && (
         <Notification
           message={notificationMessage}
