@@ -37,7 +37,7 @@ export default (pool) => {
 
   router.post('/login', async (req, res) => {
     const { email, password } = req.body;
-
+    console.log('Запрос на вход:', { email, password });
     try {
       const result = await pool.query('SELECT id, name, email, password FROM users WHERE email = $1', [email]);
 
@@ -46,8 +46,9 @@ export default (pool) => {
       }
 
       const user = result.rows[0];
+      console.log('Пользователь из БД:', user);
       const valid = await bcrypt.compare(password, user.password);
-
+    console.log('Password valid:', valid);      
       if (!valid) {
         return res.status(400).json({ error: 'Неверный email или пароль' });
       }
