@@ -129,7 +129,7 @@ export const ServicesPage: React.FC = () => {
   
 
   return (
-    <main className="bg-gray-50 min-h-screen py-20 px-4">
+    <main className="min-h-screen py-20 px-4">
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-4">

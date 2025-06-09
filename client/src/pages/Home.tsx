@@ -42,7 +42,7 @@ const services = [
 
 const Home: React.FC = () => {
   return (
-    <main className="bg-gray-50 min-h-screen py-16 px-4">
+    <main className="min-h-screen py-16 px-4">
       {/* Hero Section */}
       <section className="max-w-5xl mx-auto text-center mb-16">
         <h1 className="text-4xl md:text-5xl font-bold text-violet-700 mb-4">
