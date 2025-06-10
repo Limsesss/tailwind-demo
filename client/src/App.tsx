@@ -10,7 +10,6 @@ import { CartProvider } from './components/CartContext';
 import Home from './pages/Home'; // ✅ Добавляем импорт
 import BackgroundWaves from './components/BackgroundWaves';
 import AuthForm from './components/AuthForm';
-import ProfileTabs from './components/ProfileTabs';
 
 export const App: React.FC = () => {
   const [userId, setUserId] = useState<number | null>(null);
@@ -31,7 +30,6 @@ export const App: React.FC = () => {
   return (
     <Router>
       <CartProvider userId={userId}>
-        <ProfileTabs userId={userId} />
         <div className="min-h-screen flex flex-col relative">
            <BackgroundWaves /> {/* 🌊 Анимированный фон */}
           <Header />
