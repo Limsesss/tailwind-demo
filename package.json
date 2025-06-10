@@ -2,10 +2,10 @@
   "name": "tailwind-demo",
   "version": "1.0.0",
   "type": "module",
-  "scripts": {
-    "build": "npm run build --prefix client",
-    "start": "npm run build && node server.js"
-  },
+ "scripts": {
+  "start": "node server.js",
+  "build-client": "npm run build --prefix client"
+},
   "engines": {
     "node": "18.x"
   },

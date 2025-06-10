@@ -12,7 +12,6 @@ interface Service {
   shortDescription: string;
   fullDescription: string;
   image: string;
-  description: string;
   price: number;
 }
 
@@ -23,7 +22,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Определим проблему и подскажем, что делать.',
     fullDescription: 'Проводим аппаратную и программную диагностику для выявления причин неисправности. Включает проверку всех основных компонентов (жёсткий диск, оперативная память, питание, температура и т.д.)',
     image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
-    description: 'Диагностика компьютера',
     price: 1000,
   },
   {
@@ -32,7 +30,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Вернём утерянные файлы.',
     fullDescription: 'Восстановим удалённые, повреждённые или потерянные данные с HDD, SSD, флешек и карт памяти. Работаем даже с носителями, которые не читаются системой.',
     image: 'https://images.unsplash.com/photo-1562577309-2592ab84b1bc?auto=format&fit=crop&w=800&q=80',
-    description: 'Восстановление данных',
     price: 5000,
   },
   {
@@ -41,7 +38,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Починим или заменим сломанные части',
     fullDescription: 'Выполняем ремонт или замену неисправных компонентов: материнских плат, жёстких дисков, оперативной памяти, видеокарт, процессоров, блоков питания и т.д. Работаем с настольными ПК и ноутбуками. Все детали подбираются индивидуально.',
     image: 'https://cdn.pixabay.com/photo/2014/05/02/21/47/repair-336049_1280.jpg',
-    description: 'Ремонт и замена комплектующих',
     price: 1000,
   },
   {
@@ -50,7 +46,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Лицензионная установка Windows 10/11',
     fullDescription: 'Установка или переустановка ОС с полным набором драйверов и нужных программ. Возможна настройка под ваши задачи (офис, игры, работа, обучение). Включает оптимизацию и защиту от вирусов.',
     image: 'https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80',
-    description: 'Установка Windows',
     price: 1500,
   },
   {
@@ -59,7 +54,7 @@ const SERVICES: Service[] = [
     shortDescription: 'Удалим вредоносное ПО и защитим ПК.',
     fullDescription: 'Полная проверка системы на вирусы, трояны, рекламное и шпионское ПО. Удаление угроз, восстановление повреждённых файлов и системных настроек. Настроим антивирус и рекомендации по безопасности.',
     image: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=800&q=80',
-    description: 'Удалим вредоносное ПО и защитим ПК.',
+
     price: 500,
   },
   {
@@ -68,7 +63,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Устраним перегрев и шум.',
     fullDescription: 'Разбор и чистка ноутбуков или ПК от пыли, замена термопасты, проверка вентиляторов. Помогает предотвратить перегрев, продлить срок службы устройства и снизить уровень шума.',
     image: 'https://cdn.pixabay.com/photo/2020/08/20/19/43/cleaning-5504273_1280.jpg',
-    description: 'Устраним перегрев и шум.',
     price: 1000,
   },
   {
@@ -77,7 +71,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Сделаем ваш компьютер мощнее.',
     fullDescription: 'Проведём замену и установку новых комплектующих: SSD вместо HDD, добавление оперативной памяти, установка видеокарты и т.д. Консультация по выбору деталей включена.',
     image: 'https://cdn.pixabay.com/photo/2020/03/20/17/27/computer-4947946_1280.jpg',
-    description: 'Апгрейд и модернизация ПК',
     price: 2000,
   },
   {
@@ -86,7 +79,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Всё подключим и настроим.',
     fullDescription: 'Настроим интернет, Wi-Fi, локальные сети, роутеры, принтеры и другое периферийное оборудование. Обеспечим стабильную работу и защиту вашей домашней или офисной сети.',
     image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
-    description: 'Всё подключим и настроим.',
     price: 1200,
   },
   {
@@ -95,7 +87,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Мастер приедет к вам.',
     fullDescription: 'Выезд специалиста на дом или в офис. Возможна диагностика, настройка, мелкий ремонт, установка ОС или подключение техники прямо на месте.',
     image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80',
-    description: 'Мастер приедет к вам.',
     price: 1500,
   },
   {
@@ -104,7 +95,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Индивидуальный ПК под любые задачи.',
     fullDescription: 'Соберём системный блок под ваши нужды — будь то офисный, игровой или рабочий компьютер. Подбор оптимальных комплектующих, сборка, установка ПО и тестирование.',
     image: 'https://cdn.pixabay.com/photo/2015/01/21/14/14/technology-606763_1280.jpg',
-    description: 'Индивидуальный ПК под любые задачи.',
     price: 3000,
   },
 ];
