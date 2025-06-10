@@ -2,7 +2,6 @@ import React from "react";
 import ServiceCard from "../components/ServiceCard";
 import { motion } from "framer-motion";
 import FAQSection from "../components/FAQSection";
-import ContactForm from "components/ContactForm";
 import BackgroundWaves from "../components/BackgroundWaves";
 
 const services = [
@@ -14,7 +13,6 @@ const services = [
       "Проводим тщательную чистку внутренних компонентов вашего компьютера или ноутбука, чтобы улучшить охлаждение и продлить срок службы техники.",
     image:
       "https://images.unsplash.com/photo-1587825140408-cd64ec2db156?auto=format&fit=crop&w=600&q=80",
-    description: "Профилактическая чистка ПК и ноутбуков.",
     price: 1000,
   },
   {
@@ -25,7 +23,6 @@ const services = [
       "Заменяем и устанавливаем новые комплектующие — от оперативной памяти до видеокарт — с гарантией качества и совместимости.",
     image:
       "https://images.unsplash.com/photo-1581091870621-1bf580f82eec?auto=format&fit=crop&w=600&q=80",
-    description: "Установка новых деталей.",
     price: 2000,
   },
   {
@@ -36,7 +33,6 @@ const services = [
       "Переустанавливаем Windows, настраиваем драйверы, обеспечиваем безопасность и оптимизацию для максимальной производительности.",
     image:
       "https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80",
-    description: "Переустановка и настройка ОС.",
     price: 1500,
   },
 ];
