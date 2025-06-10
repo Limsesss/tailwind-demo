@@ -8,7 +8,6 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     emptyOutDir: true,
-    sourcemap: true,
   },
   base: './', // для правильных путей в билде
   server: {
