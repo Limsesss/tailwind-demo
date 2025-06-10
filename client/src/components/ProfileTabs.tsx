@@ -53,48 +53,47 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ userId }) => {
   }, [activeTab]);
 
   const fetchUser = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/profile/${userId}`);
-      if (!res.ok) throw new Error('Ошибка загрузки профиля');
-      const data = await res.json();
-      setUser(data);
-      setFormData(data);
-    } catch {
-      setError('Ошибка загрузки профиля');
-    } finally {
-      setLoading(false);
-    }
-  };
+  setLoading(true);
+  try {
+    const res = await fetch(`/api/profile/${userId}`);
+    if (!res.ok) throw new Error('Ошибка загрузки профиля');
+    const data = await res.json();
+    setUser(data);
+    setFormData(data);
+  } catch {
+    setError('Ошибка загрузки профиля');
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const fetchOrders = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/orders/${userId}`);
-      if (!res.ok) throw new Error('Ошибка загрузки заказов');
-      const data = await res.json();
-      setOrders(data);
-    } catch {
-      setError('Ошибка загрузки заказов');
-    } finally {
-      setLoading(false);
-    }
-  };
+const fetchOrders = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch(`/api/orders/${userId}`);
+    if (!res.ok) throw new Error('Ошибка загрузки заказов');
+    const data = await res.json();
+    setOrders(data);
+  } catch {
+    setError('Ошибка загрузки заказов');
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const fetchCart = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(`/api/cart/${userId}`);
-      if (!res.ok) throw new Error('Ошибка загрузки корзины');
-      const data = await res.json();
-      setCartItems(data);
-    } catch {
-      setError('Ошибка загрузки корзины');
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const fetchCart = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch(`/api/cart/${userId}`);
+    if (!res.ok) throw new Error('Ошибка загрузки корзины');
+    const data = await res.json();
+    setCartItems(data);
+  } catch {
+    setError('Ошибка загрузки корзины');
+  } finally {
+    setLoading(false);
+  }
+};
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (formData) {
       setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -102,57 +101,57 @@ export const ProfileTabs: React.FC<ProfileTabsProps> = ({ userId }) => {
   };
 
   const handleSaveProfile = async () => {
-    if (!formData) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/profile/${userId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-      if (!res.ok) throw new Error('Ошибка сохранения профиля');
-      setUser(formData);
-      setEditMode(false);
-    } catch {
-      setError('Не удалось сохранить профиль');
-    } finally {
-      setLoading(false);
-    }
-  };
+  if (!formData) return;
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await fetch(`/api/profile/${userId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(formData),
+    });
+    if (!res.ok) throw new Error('Ошибка сохранения профиля');
+    setUser(formData);
+    setEditMode(false);
+  } catch {
+    setError('Не удалось сохранить профиль');
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const handleRemoveCartItem = async (id: number) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/cart/${userId}/${id}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Ошибка удаления из корзины');
-      await fetchCart();
-    } catch {
-      setError('Не удалось удалить элемент из корзины');
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleRemoveCartItem = async (id: number) => {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await fetch(`/api/cart/${userId}/${id}`, { method: 'DELETE' });
+    if (!res.ok) throw new Error('Ошибка удаления из корзины');
+    await fetchCart();
+  } catch {
+    setError('Не удалось удалить элемент из корзины');
+  } finally {
+    setLoading(false);
+  }
+};
 
-  const handleQuantityChange = async (id: number, quantity: number) => {
-    if (quantity < 1) return;
-    setLoading(true);
-    setError(null);
-    try {
-      const res = await fetch(`/api/cart/${userId}/${id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ quantity }),
-      });
-      if (!res.ok) throw new Error('Ошибка обновления количества');
-      await fetchCart();
-    } catch {
-      setError('Не удалось обновить количество');
-    } finally {
-      setLoading(false);
-    }
-  };
+const handleQuantityChange = async (id: number, quantity: number) => {
+  if (quantity < 1) return;
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await fetch(`/api/cart/${userId}/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quantity }),
+    });
+    if (!res.ok) throw new Error('Ошибка обновления количества');
+    await fetchCart();
+  } catch {
+    setError('Не удалось обновить количество');
+  } finally {
+    setLoading(false);
+  }
+};
 
   const totalCartPrice = cartItems.reduce(
     (acc, item) => acc + item.price * item.quantity,
