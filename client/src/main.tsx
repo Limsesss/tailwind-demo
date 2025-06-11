@@ -6,8 +6,6 @@ import { CartProvider } from './components/CartContext'; // <== добавь и�
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <CartProvider> {/* <== Оберни App */}
       <App />
-    </CartProvider>
   </React.StrictMode>
 );
