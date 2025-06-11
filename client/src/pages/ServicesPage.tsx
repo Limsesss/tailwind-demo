@@ -70,7 +70,7 @@ const SERVICES: Service[] = [
     title: 'Апгрейд и модернизация ПК',
     shortDescription: 'Сделаем ваш компьютер мощнее.',
     fullDescription: 'Проведём замену и установку новых комплектующих: SSD вместо HDD, добавление оперативной памяти, установка видеокарты и т.д. Консультация по выбору деталей включена.',
-    image: 'https://cdn.pixabay.com/photo/2020/03/20/17/27/computer-4947946_1280.jpg',
+    image: 'https://images.unsplash.com/photo-1611221248100-b137b49f0d54?auto=format&fit=crop&w=800&q=80',
     price: 2000,
   },
   {
