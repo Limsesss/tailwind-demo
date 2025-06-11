@@ -54,7 +54,6 @@ const SERVICES: Service[] = [
     shortDescription: 'Удалим вредоносное ПО и защитим ПК.',
     fullDescription: 'Полная проверка системы на вирусы, трояны, рекламное и шпионское ПО. Удаление угроз, восстановление повреждённых файлов и системных настроек. Настроим антивирус и рекомендации по безопасности.',
     image: 'https://images.unsplash.com/photo-1510511459019-5dda7724fd87?auto=format&fit=crop&w=800&q=80',
-
     price: 500,
   },
   {
@@ -70,7 +69,7 @@ const SERVICES: Service[] = [
     title: 'Апгрейд и модернизация ПК',
     shortDescription: 'Сделаем ваш компьютер мощнее.',
     fullDescription: 'Проведём замену и установку новых комплектующих: SSD вместо HDD, добавление оперативной памяти, установка видеокарты и т.д. Консультация по выбору деталей включена.',
-    image: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Computer_icon.svg/800px-Computer_icon.svg.png',
+    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
     price: 2000,
   },
   {
