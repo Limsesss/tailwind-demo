@@ -7,23 +7,19 @@ import BackgroundWaves from "../components/BackgroundWaves";
 const services = [
   {
     id: 1,
-    title: "Чистка от пыли",
-    shortDescription: "Профилактическая чистка ПК и ноутбуков.",
-    fullDescription:
-      "Проводим тщательную чистку внутренних компонентов вашего компьютера или ноутбука, чтобы улучшить охлаждение и продлить срок службы техники.",
-    image:
-      "https://images.unsplash.com/photo-1587825140408-cd64ec2db156?auto=format&fit=crop&w=600&q=80",
+    title: 'Диагностика компьютера',
+    shortDescription: 'Определим проблему и подскажем, что делать.',
+    fullDescription: 'Проводим аппаратную и программную диагностику для выявления причин неисправности. Включает проверку всех основных компонентов (жёсткий диск, оперативная память, питание, температура и т.д.)',
+    image: 'https://images.unsplash.com/photo-1517336714731-489689fd1ca8?auto=format&fit=crop&w=800&q=80',
     price: 1000,
   },
-  {
-    id: 2,
-    title: "Замена комплектующих",
-    shortDescription: "Установка новых деталей.",
-    fullDescription:
-      "Заменяем и устанавливаем новые комплектующие — от оперативной памяти до видеокарт — с гарантией качества и совместимости.",
-    image:
-      "https://images.unsplash.com/photo-1581091870621-1bf580f82eec?auto=format&fit=crop&w=600&q=80",
-    price: 2000,
+ {
+    id: 9,
+    title: 'Выездной ремонт',
+    shortDescription: 'Мастер приедет к вам.',
+    fullDescription: 'Выезд специалиста на дом или в офис. Возможна диагностика, настройка, мелкий ремонт, установка ОС или подключение техники прямо на месте.',
+    image: 'https://images.unsplash.com/photo-1524758631624-e2822e304c36?auto=format&fit=crop&w=800&q=80',
+    price: 1500,
   },
   {
     id: 3,
