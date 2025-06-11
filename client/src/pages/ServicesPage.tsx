@@ -36,8 +36,8 @@ const SERVICES: Service[] = [
     id: 3,
     title: 'Ремонт и замена комплектующих',
     shortDescription: 'Починим или заменим сломанные части',
-    fullDescription: 'Выполняем ремонт или замену неисправных компонентов: материнских плат, жёстких дисков, оперативной памяти, видеокарт, процессоров, блоков питания и т.д. Работаем с настольными ПК и ноутбуками. Все детали подбираются индивидуально.',
-    image: 'https://cdn.pixabay.com/photo/2014/05/02/21/47/repair-336049_1280.jpg',
+    fullDescription: 'Выполняем ремонт или замену неисправных компонентов...',
+    image: 'https://images.unsplash.com/photo-1593642532973-d31b6557fa68?auto=format&fit=crop&w=800&q=80',
     price: 1000,
   },
   {
@@ -62,7 +62,7 @@ const SERVICES: Service[] = [
     title: 'Чистка системы охлаждения',
     shortDescription: 'Устраним перегрев и шум.',
     fullDescription: 'Разбор и чистка ноутбуков или ПК от пыли, замена термопасты, проверка вентиляторов. Помогает предотвратить перегрев, продлить срок службы устройства и снизить уровень шума.',
-    image: 'https://cdn.pixabay.com/photo/2020/08/20/19/43/cleaning-5504273_1280.jpg',
+    image: 'https://images.unsplash.com/photo-1591696205602-2f950c417cb9?auto=format&fit=crop&w=800&q=80',
     price: 1000,
   },
   {
@@ -78,7 +78,7 @@ const SERVICES: Service[] = [
     title: 'Настройка сети и подключение устройств',
     shortDescription: 'Всё подключим и настроим.',
     fullDescription: 'Настроим интернет, Wi-Fi, локальные сети, роутеры, принтеры и другое периферийное оборудование. Обеспечим стабильную работу и защиту вашей домашней или офисной сети.',
-    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1603791440384-56cd371ee9a7?auto=format&fit=crop&w=800&q=80',
     price: 1200,
   },
   {
