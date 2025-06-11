@@ -10,14 +10,13 @@ export interface CartItem {
 interface CartContextType {
   cartItems: CartItem[];
   addToCart: (item: Omit<CartItem, 'quantity'>) => Promise<void>;
-  removeFromCart: (id: number) => void;
-  updateQuantity: (id: number, quantity: number) => void;
+  removeFromCart: (id: number) => Promise<void>;
+  updateQuantity: (id: number, quantity: number) => Promise<void>;
 }
 
-// Добавляем интерфейс пропсов для CartProvider
 interface CartProviderProps {
   children: ReactNode;
-  userId: number | null;  // userId теперь приходит сюда
+  userId: number | null;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -36,49 +35,77 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children, userId }) 
       setCartItems([]);
       return;
     }
-    // Загрузка корзины с сервера для userId
+
+    const controller = new AbortController();
+    const signal = controller.signal;
+
     async function fetchCart() {
       try {
-        const res = await fetch(`/api/cart?userId=${userId}`);
+        const res = await fetch(`/api/cart?userId=${userId}`, { signal });
         if (!res.ok) throw new Error('Ошибка загрузки корзины');
         const data: CartItem[] = await res.json();
         setCartItems(data);
-      } catch (e) {
-        console.error('Failed to fetch cart:', e);
+      } catch (e: any) {
+        if (e.name !== 'AbortError') {
+          console.error('Ошибка загрузки корзины:', e);
+        }
       }
     }
+
     fetchCart();
+    return () => controller.abort();
   }, [userId]);
 
   const addToCart = async (item: Omit<CartItem, 'quantity'>) => {
-    if (!userId) {
-      throw new Error('User is not logged in');
-    }
+    if (!userId) throw new Error('User is not logged in');
+
     const res = await fetch('/api/cart', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId, service: item.service, price: item.price, quantity: 1 }),
     });
+
+    const data = await res.json();
+
     if (!res.ok) {
-      const data = await res.json();
-      throw new Error(data.error || 'Неизвестная ошибка');
+      throw new Error(data.error || 'Ошибка добавления в корзину');
     }
+
     setCartItems(prev => {
-      const exist = prev.find(ci => ci.id === item.id);
+      const exist = prev.find(ci => ci.id === data.id);
       if (exist) {
-        return prev.map(ci => (ci.id === item.id ? { ...ci, quantity: ci.quantity + 1 } : ci));
+        return prev.map(ci => (ci.id === data.id ? { ...ci, quantity: ci.quantity + 1 } : ci));
       }
-      return [...prev, { ...item, quantity: 1 }];
+      return [...prev, { ...item, id: data.id, quantity: 1 }];
     });
   };
 
-  const removeFromCart = (id: number) => {
+  const removeFromCart = async (id: number) => {
+    const res = await fetch(`/api/cart/${id}`, { method: 'DELETE' });
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Ошибка удаления из корзины');
+    }
     setCartItems(prev => prev.filter(ci => ci.id !== id));
   };
 
-  const updateQuantity = (id: number, quantity: number) => {
+  const updateQuantity = async (id: number, quantity: number) => {
     if (quantity < 1) return;
-    setCartItems(prev => prev.map(ci => (ci.id === id ? { ...ci, quantity } : ci)));
+
+    const res = await fetch(`/api/cart/${id}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ quantity }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Ошибка обновления количества');
+    }
+
+    setCartItems(prev =>
+      prev.map(ci => (ci.id === id ? { ...ci, quantity } : ci))
+    );
   };
 
   return (
