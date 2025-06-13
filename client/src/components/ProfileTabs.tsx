@@ -272,47 +272,72 @@ const handleQuantityChange = async (id: number, quantity: number) => {
         </section>
       )}
 
-      {activeTab === 'cart' && (
-        <section>
-          {cartItems.length === 0 ? (
-            <p>Ваша корзина пуста.</p>
-          ) : (
-            <div>
-              <ul className="space-y-4 mb-4">
-                {cartItems.map(item => (
-                  <li
-                    key={item.id}
-                    className="flex justify-between items-center border p-4 rounded shadow-sm"
-                  >
-                    <div>
-                      <p><strong>{item.service}</strong></p>
-                      <p>Цена: {item.price} ₽</p>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <input
-                        type="number"
-                        min={1}
-                        value={item.quantity}
-                        onChange={e => handleQuantityChange(item.id, +e.target.value)}
-                        className="w-16 p-1 border rounded text-center"
-                      />
-                      <button
-                        onClick={() => handleRemoveCartItem(item.id)}
-                        className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
-                      >
-                        Удалить
-                      </button>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-              <p className="text-right font-bold text-lg">
-                Итого: {totalCartPrice} ₽
-              </p>
-            </div>
-          )}
-        </section>
-      )}
+     {activeTab === 'cart' && (
+  <section>
+    {cartItems.length === 0 ? (
+      <p>Ваша корзина пуста.</p>
+    ) : (
+      <div>
+        <ul className="space-y-4 mb-4">
+          {cartItems.map(item => (
+            <li
+              key={item.id}
+              className="flex justify-between items-center border p-4 rounded shadow-sm"
+            >
+              <div>
+                <p><strong>{item.service}</strong></p>
+                <p>Цена: {item.price} ₽</p>
+              </div>
+              <div className="flex items-center space-x-2">
+                <input
+                  type="number"
+                  min={1}
+                  value={item.quantity}
+                  onChange={e => handleQuantityChange(item.id, +e.target.value)}
+                  className="w-16 p-1 border rounded text-center"
+                />
+                <button
+                  onClick={() => handleRemoveCartItem(item.id)}
+                  className="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
+                >
+                  Удалить
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+        <div className="flex justify-between items-center">
+          <p className="text-right font-bold text-lg">
+            Итого: {totalCartPrice} ₽
+          </p>
+          <button
+            onClick={async () => {
+              try {
+                setLoading(true);
+                setError(null);
+                const res = await fetch('/api/orders', {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json' },
+                  body: JSON.stringify({ userId, items: cartItems }),
+                });
+                if (!res.ok) throw new Error('Ошибка оформления заказа');
+                await fetchCart();
+                await fetchOrders(); // обновить заказы после оформления
+              } catch (err) {
+                setError('Не удалось оформить заказ');
+              } finally {
+                setLoading(false);
+              }
+            }}
+            className="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700"
+          >
+            Оформить заказ
+          </button>
+        </div>
+      </div>
+    )}
+  </section>
+)}
     </main>
   );
 };

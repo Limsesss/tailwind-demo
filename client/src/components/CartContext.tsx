@@ -1,4 +1,10 @@
-import React, { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useState,
+  ReactNode,
+  useEffect,
+} from 'react';
 
 export interface CartItem {
   id: number;
@@ -12,6 +18,7 @@ interface CartContextType {
   addToCart: (item: Omit<CartItem, 'quantity'>) => Promise<void>;
   removeFromCart: (id: number) => Promise<void>;
   updateQuantity: (id: number, quantity: number) => Promise<void>;
+  checkout: () => Promise<void>; // ✅ Добавлено
 }
 
 interface CartProviderProps {
@@ -27,7 +34,10 @@ export const useCart = () => {
   return ctx;
 };
 
-export const CartProvider: React.FC<CartProviderProps> = ({ children, userId }) => {
+export const CartProvider: React.FC<CartProviderProps> = ({
+  children,
+  userId,
+}) => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
   useEffect(() => {
@@ -62,7 +72,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children, userId }) 
     const res = await fetch('/api/cart', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, service: item.service, price: item.price, quantity: 1 }),
+      body: JSON.stringify({
+        userId,
+        service: item.service,
+        price: item.price,
+        quantity: 1,
+      }),
     });
 
     const data = await res.json();
@@ -71,10 +86,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children, userId }) 
       throw new Error(data.error || 'Ошибка добавления в корзину');
     }
 
-    setCartItems(prev => {
-      const exist = prev.find(ci => ci.id === data.id);
+    setCartItems((prev) => {
+      const exist = prev.find((ci) => ci.id === data.id);
       if (exist) {
-        return prev.map(ci => (ci.id === data.id ? { ...ci, quantity: ci.quantity + 1 } : ci));
+        return prev.map((ci) =>
+          ci.id === data.id ? { ...ci, quantity: ci.quantity + 1 } : ci
+        );
       }
       return [...prev, { ...item, id: data.id, quantity: 1 }];
     });
@@ -86,7 +103,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children, userId }) 
       const data = await res.json();
       throw new Error(data.error || 'Ошибка удаления из корзины');
     }
-    setCartItems(prev => prev.filter(ci => ci.id !== id));
+    setCartItems((prev) => prev.filter((ci) => ci.id !== id));
   };
 
   const updateQuantity = async (id: number, quantity: number) => {
@@ -103,13 +120,38 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children, userId }) 
       throw new Error(data.error || 'Ошибка обновления количества');
     }
 
-    setCartItems(prev =>
-      prev.map(ci => (ci.id === id ? { ...ci, quantity } : ci))
+    setCartItems((prev) =>
+      prev.map((ci) => (ci.id === id ? { ...ci, quantity } : ci))
     );
   };
 
+  const checkout = async () => {
+    if (!userId || cartItems.length === 0) return;
+
+    const res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, items: cartItems }),
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.error || 'Ошибка оформления заказа');
+    }
+
+    setCartItems([]);
+  };
+
   return (
-    <CartContext.Provider value={{ cartItems, addToCart, removeFromCart, updateQuantity }}>
+    <CartContext.Provider
+      value={{
+        cartItems,
+        addToCart,
+        removeFromCart,
+        updateQuantity,
+        checkout,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );
