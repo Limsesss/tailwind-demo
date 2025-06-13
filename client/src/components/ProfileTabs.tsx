@@ -138,11 +138,12 @@ const handleCheckout = async () => {
   setLoading(true);
   setError(null);
   try {
-    const res = await fetch('/api/orders', {
+    const res = await fetch('/api/orders/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId, items: cartItems }),
+      body: JSON.stringify({ userId }), // убрать items
     });
+
     if (!res.ok) throw new Error('Ошибка оформления заказа');
 
     await fetchCart();
