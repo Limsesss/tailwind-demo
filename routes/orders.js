@@ -27,7 +27,7 @@ export default (pool) => {
     try {
       await pool.query(
         'INSERT INTO "Order" ("userId", service, status, "createdAt") VALUES ($1, $2, $3, NOW())',
-        [userId, service, 'новый']
+        [ userId, servicesList, 'в обработке', total ]
       );
       res.status(201).json({ success: true });
     } catch (err) {

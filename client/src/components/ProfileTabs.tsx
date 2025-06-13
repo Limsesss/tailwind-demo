@@ -134,6 +134,26 @@ const handleRemoveCartItem = async (id: number) => {
   }
 };
 
+const handleCheckout = async () => {
+  setLoading(true);
+  setError(null);
+  try {
+    const res = await fetch('/api/orders', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId, items: cartItems }),
+    });
+    if (!res.ok) throw new Error('Ошибка оформления заказа');
+
+    await fetchCart();
+    await fetchOrders();
+  } catch {
+    setError('Не удалось оформить заказ');
+  } finally {
+    setLoading(false);
+  }
+};
+
 const handleQuantityChange = async (id: number, quantity: number) => {
   if (quantity < 1) return;
   setLoading(true);
@@ -310,29 +330,13 @@ const handleQuantityChange = async (id: number, quantity: number) => {
           <p className="text-right font-bold text-lg">
             Итого: {totalCartPrice} ₽
           </p>
-          <button
-            onClick={async () => {
-              try {
-                setLoading(true);
-                setError(null);
-                const res = await fetch('/api/orders', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({ userId, items: cartItems }),
-                });
-                if (!res.ok) throw new Error('Ошибка оформления заказа');
-                await fetchCart();
-                await fetchOrders(); // обновить заказы после оформления
-              } catch (err) {
-                setError('Не удалось оформить заказ');
-              } finally {
-                setLoading(false);
-              }
-            }}
-            className="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700"
-          >
-            Оформить заказ
-          </button>
+         <button
+  onClick={handleCheckout}
+  className="px-5 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+  disabled={loading || cartItems.length === 0}
+>
+  {loading ? 'Оформление...' : 'Оформить заказ'}
+</button>
         </div>
       </div>
     )}
